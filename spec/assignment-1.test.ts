@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import encounters from "../src/data/encounters.json";
 import milestones from "../src/data/milestones.json";
 import {
   getActiveMilestone,
@@ -51,6 +52,33 @@ describe("as the journey distance changes, the active milestone changes", () => 
 
     for (let i = 1; i < positions.length; i++) {
       expect(positions[i]).toBeGreaterThanOrEqual(positions[i - 1]);
+    }
+  });
+});
+
+// The scope rule for this project is "15 major milestones, richer encounters
+// attached to them" — not "milestones grow every time the visuals grow".
+// This is the guard rail: it fails loudly if a future content pass turns an
+// encounter into a 16th milestone, or attaches an encounter to a milestone
+// that no longer exists.
+describe("encounters stay attached to the 15 existing milestones", () => {
+  it("keeps exactly the 15 milestones the spec locked in", () => {
+    expect(milestones).toHaveLength(15);
+  });
+
+  it("only attaches encounters to milestones that actually exist", () => {
+    const milestoneIds = new Set(milestones.map((m) => m.id));
+    for (const milestoneId of Object.keys(encounters)) {
+      expect(milestoneIds.has(milestoneId)).toBe(true);
+    }
+  });
+
+  it("gives every encounter a non-empty kind and label", () => {
+    for (const list of Object.values(encounters)) {
+      for (const encounter of list) {
+        expect(encounter.kind.length).toBeGreaterThan(0);
+        expect(encounter.label.length).toBeGreaterThan(0);
+      }
     }
   });
 });

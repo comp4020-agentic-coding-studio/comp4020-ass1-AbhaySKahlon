@@ -1,0 +1,36 @@
+---
+// The decorative counterpart to a milestone's encounter list: the same
+// encounters, scattered as small icons across the section's background
+// instead of only living in the text list. Generated from the same data —
+// no encounter is hand-placed, and none of this is the only place its
+// information appears (aria-hidden; the text list is the accessible copy).
+import Icon from "./Icon.astro";
+import { scatterFor, type ScatterBand } from "../lib/scatter";
+
+export interface Props {
+  seed: string;
+  encounters: { kind: string; label: string }[];
+  band?: ScatterBand;
+}
+
+const { seed, encounters, band } = Astro.props;
+---
+
+{
+  encounters.length > 0 && (
+    <div class="encounter-field" aria-hidden="true">
+      {encounters.map((encounter, index) => {
+        const point = scatterFor(seed, index, band);
+        return (
+          <span
+            class="encounter-icon"
+            data-kind={encounter.kind}
+            style={`left:${point.leftPercent}%;top:${point.topPercent}%;--icon-size:${point.sizePx}px;--icon-flip:${point.flip}`}
+          >
+            <Icon name={encounter.kind} />
+          </span>
+        );
+      })}
+    </div>
+  )
+}

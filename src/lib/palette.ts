@@ -10,11 +10,13 @@ interface ColorKeyframe {
 
 const KEYFRAMES: ColorKeyframe[] = [
   { position: 0.0, rgb: [111, 182, 224] }, // Earth: sky blue
-  { position: 0.2, rgb: [46, 109, 164] }, // upper troposphere / stratosphere
-  { position: 0.36, rgb: [18, 50, 88] }, // mesosphere / Kármán line
-  { position: 0.52, rgb: [6, 11, 26] }, // low Earth orbit
+  { position: 0.15, rgb: [66, 140, 195] }, // troposphere
+  { position: 0.28, rgb: [35, 90, 150] }, // stratosphere / mesosphere
+  { position: 0.355, rgb: [20, 55, 95] }, // the last moment of blue sky
+  { position: 0.36, rgb: [5, 10, 22] }, // the Kármán line: sky flips to space here
+  { position: 0.52, rgb: [3, 6, 16] }, // low Earth orbit
   { position: 0.76, rgb: [2, 3, 10] }, // Van Allen belts / deep space
-  { position: 0.95, rgb: [11, 11, 13] }, // Moon approach
+  { position: 0.95, rgb: [10, 10, 12] }, // Moon approach
   { position: 1.0, rgb: [107, 107, 112] }, // lunar surface
 ];
 

@@ -1,5 +1,12 @@
 ---
 import type { Milestone } from "../lib/journey";
+import EncounterField from "./EncounterField.astro";
+import EarthHorizon from "./scenes/EarthHorizon.astro";
+import KarmanBanner from "./scenes/KarmanBanner.astro";
+import LunarSurface from "./scenes/LunarSurface.astro";
+import MoonDisc from "./scenes/MoonDisc.astro";
+import SolarWindField from "./scenes/SolarWindField.astro";
+import VanAllenField from "./scenes/VanAllenField.astro";
 
 export interface Encounter {
   kind: string;
@@ -17,6 +24,11 @@ export interface Props {
 
 const { milestone, encounters, heightVh, skyTop, skyBottom, isFirst } = Astro.props;
 const phaseSlug = milestone.phase.toLowerCase().replace(/\s+/g, "-");
+
+// The Moon's own encounters (footprints, hardware) belong on the ground
+// drawn by LunarSurface, not scattered across the whole frame.
+const encounterBand =
+  milestone.id === "moon" ? { left: [15, 85] as [number, number], top: [70, 84] as [number, number] } : undefined;
 ---
 
 <section
@@ -26,6 +38,17 @@ const phaseSlug = milestone.phase.toLowerCase().replace(/\s+/g, "-");
   data-distance-km={milestone.distanceKm}
   style={`min-height:${heightVh}vh;--sky-top:${skyTop};--sky-bottom:${skyBottom}`}
 >
+  <div class="stop-scene" aria-hidden="true">
+    {milestone.id === "earth" && <EarthHorizon />}
+    {milestone.id === "inner-van-allen" && <VanAllenField variant="inner" />}
+    {milestone.id === "outer-van-allen" && <VanAllenField variant="outer" />}
+    {milestone.id === "solar-wind" && <SolarWindField />}
+    {milestone.id === "moon-approach" && <MoonDisc size="approach" />}
+    {milestone.id === "moon" && <MoonDisc size="full" />}
+    {milestone.id === "moon" && <LunarSurface />}
+  </div>
+  <EncounterField seed={milestone.id} encounters={encounters} band={encounterBand} />
+  {milestone.id === "karman-line" && <KarmanBanner />}
   <div class="stop-content">
     {isFirst && <h1>Deep Space: Earth to Moon</h1>}
     <p class="stop-eyebrow">{milestone.phase} · {milestone.distanceLabel}</p>

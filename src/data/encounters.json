@@ -3,9 +3,11 @@
     { "kind": "cloud", "label": "Clouds and weather, all of it, from here up" },
     { "kind": "bird", "label": "Ordinary birds, near the top of their range" },
     { "kind": "insect", "label": "Insects and \"aerial plankton\" lifted on rising air" },
-    { "kind": "bird", "label": "Bar-headed geese — they fly higher than almost any other bird" }
+    { "kind": "bird", "label": "Bar-headed geese — they fly higher than almost any other bird" },
+    { "kind": "aircraft", "label": "Airliners cruise near the top of this layer, around 10–12 km" }
   ],
   "stratosphere": [
+    { "kind": "balloon", "label": "Weather balloons climb this high before they burst" },
     { "kind": "layer", "label": "The ozone layer, absorbing ultraviolet light" },
     { "kind": "spore", "label": "Bacteria and fungal spores, carried this high by chance" }
   ],
@@ -15,13 +17,26 @@
   "karman-line": [
     { "kind": "boundary", "label": "The conventional line between sky and space" }
   ],
+  "low-earth-orbit": [
+    { "kind": "satellite", "label": "Thousands of active satellites share this region" },
+    { "kind": "spacecraft", "label": "Crewed and uncrewed spacecraft pass through on their way further out" }
+  ],
   "iss": [
     { "kind": "station", "label": "A continuously inhabited outpost, orbiting every 93 minutes" }
   ],
   "animal-astronauts": [
-    { "kind": "animal", "label": "Fruit flies — the first animals sent to space" },
-    { "kind": "animal", "label": "Laika, the first animal to orbit Earth" },
-    { "kind": "animal", "label": "Mice, monkeys, zebrafish, bees, spiders, tardigrades" }
+    { "kind": "fly", "label": "Fruit flies — the first animals sent to space" },
+    { "kind": "dog", "label": "Laika, the first animal to orbit Earth" },
+    { "kind": "mouse", "label": "Mice, frequent research passengers aboard the ISS" },
+    { "kind": "bee", "label": "Bees, tested for flight behaviour in microgravity" },
+    { "kind": "spider", "label": "Spiders, spinning webs in freefall" },
+    { "kind": "fish", "label": "Zebrafish, studied for how bones and muscles react to weightlessness" },
+    { "kind": "tardigrade", "label": "Tardigrades — able to survive the vacuum of space directly" }
+  ],
+  "space-debris": [
+    { "kind": "satellite-dead", "label": "Inactive satellites, still in orbit long after they stopped working" },
+    { "kind": "rocket-stage", "label": "Spent rocket stages, left behind after launch" },
+    { "kind": "fragment", "label": "Fragments as small as flecks of paint, moving fast enough to matter" }
   ],
   "inner-van-allen": [
     { "kind": "radiation", "label": "Energetic particles trapped by Earth's magnetic field — not a solid thing, a field" }
@@ -29,18 +44,18 @@
   "outer-van-allen": [
     { "kind": "radiation", "label": "A second, larger belt of trapped particles further out" }
   ],
-  "space-debris": [
-    { "kind": "debris", "label": "Inactive satellites and spent rocket stages" },
-    { "kind": "debris", "label": "Fragments as small as flecks of paint, moving fast enough to matter" }
-  ],
   "deep-space": [
-    { "kind": "empty", "label": "Mostly nothing — the emptiness is the point" }
+    { "kind": "empty", "label": "Mostly nothing — the emptiness is the point" },
+    { "kind": "dust", "label": "Occasional dust and rock, drifting for millions of years" }
   ],
   "solar-wind": [
     { "kind": "wind", "label": "A continuous stream of charged particles, flowing outward from the Sun" }
   ],
+  "moon-approach": [
+    { "kind": "moon-glow", "label": "The Moon grows from a point of light to a visible disc" }
+  ],
   "moon": [
-    { "kind": "trace", "label": "Footprints that will outlast almost everything built on Earth" },
-    { "kind": "trace", "label": "Landers, rovers and equipment, left where they stopped" }
+    { "kind": "footprint", "label": "Footprints that will outlast almost everything built on Earth" },
+    { "kind": "lander", "label": "Landers, rovers and equipment, left where they stopped" }
   ]
 }

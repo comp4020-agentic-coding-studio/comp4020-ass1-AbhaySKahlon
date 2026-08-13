@@ -1,0 +1,19 @@
+---
+// A restrained particle flow, not a decoration for its own sake: a handful
+// of faint streaks moving outward from the Sun's direction. Static (but
+// still visible as a composition) when prefers-reduced-motion is set.
+const lines = [
+  { top: 18, delay: 0 },
+  { top: 38, delay: 1.4 },
+  { top: 58, delay: 2.8 },
+  { top: 76, delay: 0.7 },
+];
+---
+
+<div class="solar-wind-field" aria-hidden="true">
+  {
+    lines.map((line) => (
+      <span class="wind-line" style={`top:${line.top}%;animation-delay:${line.delay}s`} />
+    ))
+  }
+</div>

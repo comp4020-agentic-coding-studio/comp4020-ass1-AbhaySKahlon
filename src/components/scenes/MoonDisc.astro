@@ -1,0 +1,29 @@
+---
+// The Moon rendered as a shaded disc rather than a flat grey circle, at two
+// sizes so it visibly grows between "moon-approach" and "moon" instead of
+// appearing at full size in one step.
+export interface Props {
+  size: "approach" | "full";
+}
+
+const { size } = Astro.props;
+const gradientId = `moon-shade-${size}`;
+---
+
+<div class={`moon-disc moon-disc-${size}`} aria-hidden="true">
+  <svg viewBox="0 0 100 100">
+    <defs>
+      <radialGradient id={gradientId} cx="35%" cy="35%" r="70%">
+        <stop offset="0%" stop-color="#e6e6ea" />
+        <stop offset="55%" stop-color="#aaaab0" />
+        <stop offset="100%" stop-color="#5c5c61" />
+      </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="46" fill={`url(#${gradientId})`} />
+    <circle cx="34" cy="38" r="6" class="moon-crater" />
+    <circle cx="61" cy="30" r="4" class="moon-crater" />
+    <circle cx="66" cy="58" r="8" class="moon-crater" />
+    <circle cx="40" cy="67" r="4.5" class="moon-crater" />
+    <circle cx="25" cy="58" r="3" class="moon-crater" />
+  </svg>
+</div>

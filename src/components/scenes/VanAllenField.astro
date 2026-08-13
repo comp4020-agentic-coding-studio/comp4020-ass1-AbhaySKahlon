@@ -1,0 +1,39 @@
+---
+// Earth's magnetic field trapping charged particles in two belts — a shape,
+// not a paragraph. `variant` marks which belt the traveller is passing
+// through right now so that one is drawn brighter than the other, making
+// "you are inside this one" visible rather than stated.
+export interface Props {
+  variant: "inner" | "outer";
+}
+
+const { variant } = Astro.props;
+
+function beltPoints(rx: number, ry: number, count: number) {
+  return Array.from({ length: count }, (_, i) => {
+    const angle = (i / count) * Math.PI * 2;
+    return { cx: 50 + rx * Math.cos(angle), cy: 50 + ry * Math.sin(angle) };
+  });
+}
+
+const innerParticles = beltPoints(30, 14, 9);
+const outerParticles = beltPoints(44, 21, 11);
+---
+
+<div class="van-allen-field" aria-hidden="true" data-variant={variant}>
+  <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+    <circle cx="50" cy="50" r="9" class="va-earth" />
+    <ellipse cx="50" cy="50" rx="30" ry="14" class="va-belt va-belt-inner" />
+    <ellipse cx="50" cy="50" rx="44" ry="21" class="va-belt va-belt-outer" />
+    <g class="va-particles va-particles-inner">
+      {innerParticles.map((p) => (
+        <circle cx={p.cx} cy={p.cy} r="0.9" />
+      ))}
+    </g>
+    <g class="va-particles va-particles-outer">
+      {outerParticles.map((p) => (
+        <circle cx={p.cx} cy={p.cy} r="0.9" />
+      ))}
+    </g>
+  </svg>
+</div>

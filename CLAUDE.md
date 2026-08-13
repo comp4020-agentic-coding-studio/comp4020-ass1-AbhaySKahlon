@@ -227,3 +227,54 @@ alternative ways to experience it.
 - **Do not make the repo public, deploy to the live Pages URL, run the ship
   process, or change repository visibility** unless explicitly asked. The repo
   stays private during development.
+
+### Visual language (second pass)
+
+The first working version was structurally correct but visually flat — a
+sequence of text cards on a colour gradient, not something that felt like
+travelling anywhere. The fix wasn't a new architecture, it was a visual layer
+added *behind* the existing cards:
+
+- **The scene is the explanation; the card is the caption.** Each section can
+  render a background "scene" (`src/components/scenes/*.astro`) and a
+  scattered field of small decorative icons (`EncounterField.astro`, driven
+  directly by that milestone's `encounters` array — nothing hand-placed) sitting
+  behind the sticky `.stop-content` panel. The panel holds real text and must
+  stay the accessible source of truth; the scene and the icon field are always
+  `aria-hidden="true"` and must never be the *only* place information appears.
+  The one exception is `KarmanBanner.astro` at the Kármán line — that's real,
+  visible text making 100km a deliberate visual event, not a decoration.
+- **Icons are generated from encounter `kind`, not hand-placed per
+  milestone.** `src/lib/icons.ts` maps an encounter's `kind` string to a small
+  line-icon; `src/lib/scatter.ts` positions it deterministically (hashed, not
+  `Math.random`, so layout doesn't shift between builds). Adding a new
+  encounter to `encounters.json` is enough to get both a text bullet and a
+  matching icon — don't add a one-off `<img>` or inline SVG for a single
+  encounter instead of adding an icon to the shared set.
+- **Only a handful of milestones get a bespoke scene component**: `earth`
+  (horizon/clouds), `karman-line` (the transition banner), `inner-van-allen` /
+  `outer-van-allen` (the belts, via `VanAllenField` with a `variant` prop —
+  don't create a third component for a third belt that doesn't exist),
+  `solar-wind` (particle flow), and `moon-approach` / `moon` (the growing Moon
+  disc plus, only at `moon`, the lunar ground). Every other milestone relies on
+  `EncounterField` alone. Don't add a bespoke scene for a milestone that
+  doesn't need one — that's exactly the over-decoration the spec warned
+  against.
+- **The Kármán line's blue-to-black flip is intentional palette tuning, not a
+  bug.** `src/lib/palette.ts`'s keyframes are deliberately bunched around
+  `toVisualPosition(100km)` (~0.36) so the sky visibly flips to space right at
+  the boundary instead of fading gradually across low Earth orbit. If the
+  milestone data changes, re-check that this transition still lands on the
+  Kármán line's position, not somewhere else.
+- **All new motion (icon drift, belt-particle pulse, solar wind flow) is
+  additive on top of the existing `prefers-reduced-motion` pattern**: gate the
+  `animation` declaration inside `@media (prefers-reduced-motion: no-preference)`
+  and provide an explicit `animation: none` fallback inside the existing
+  `@media (prefers-reduced-motion: reduce)` block, and make sure the static
+  (non-animated) composition still reads sensibly on its own — motion is
+  garnish, never the only way information is conveyed.
+- **Decorative elements must not introduce horizontal scroll or break
+  responsiveness.** `.stop` has `overflow: hidden`; keep any new absolutely
+  positioned scene content sized in `%`/`vmin`/`vw` with `min()` caps, and add a
+  narrower variant in the existing `@media (width <= 640px)` block rather than
+  a fixed pixel size that only works on desktop.

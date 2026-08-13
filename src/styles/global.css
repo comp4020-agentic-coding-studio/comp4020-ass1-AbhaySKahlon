@@ -110,19 +110,33 @@ main#journey {
   padding: 2rem 1.5rem;
   background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom));
   transition: background-color 0.6s ease;
+  overflow: hidden;
+}
+
+/* Layering, back to front: the phase's background scene, the scattered
+   encounter icons, the Kármán banner (real text, not decorative), then the
+   sticky content panel. The panel is supporting text now, not the main
+   event — the scene behind it is. */
+
+.stop-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .stop-content {
   position: sticky;
-  top: 14vh;
-  max-width: 34rem;
+  top: 16vh;
+  z-index: 3;
+  max-width: 28rem;
   width: 100%;
-  background: rgb(4 10 20 / 55%);
+  background: rgb(4 10 20 / 42%);
   color: #eef3fb;
-  padding: 1.75rem 2rem;
-  border-radius: 0.9rem;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 20px 60px rgb(0 0 0 / 35%);
+  padding: 1.5rem 1.75rem;
+  border-radius: 0.75rem;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 25%);
 }
 
 .stop-content h1 {
@@ -163,6 +177,303 @@ main#journey {
   opacity: 0.85;
   padding-left: 1rem;
   border-left: 2px solid rgb(238 243 251 / 35%);
+}
+
+/* ---- encounter icons (generated from each milestone's encounters) ---- */
+
+.encounter-field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.encounter-icon {
+  position: absolute;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  color: #eef3fb;
+  opacity: 0.5;
+  transform: scaleX(var(--icon-flip));
+}
+
+.encounter-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.encounter-icon[data-kind="bird"],
+.encounter-icon[data-kind="insect"],
+.encounter-icon[data-kind="aircraft"],
+.encounter-icon[data-kind="balloon"],
+.encounter-icon[data-kind="satellite"],
+.encounter-icon[data-kind="spacecraft"],
+.encounter-icon[data-kind="dust"] {
+  opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .encounter-icon[data-kind="bird"],
+  .encounter-icon[data-kind="insect"] {
+    animation: drift-x 14s ease-in-out infinite;
+  }
+
+  .encounter-icon[data-kind="satellite"],
+  .encounter-icon[data-kind="spacecraft"],
+  .encounter-icon[data-kind="dust"] {
+    animation: drift-y 18s ease-in-out infinite;
+  }
+}
+
+@keyframes drift-x {
+  0%,
+  100% {
+    transform: scaleX(var(--icon-flip)) translateX(0);
+  }
+
+  50% {
+    transform: scaleX(var(--icon-flip)) translateX(1.5rem);
+  }
+}
+
+@keyframes drift-y {
+  0%,
+  100% {
+    transform: scaleX(var(--icon-flip)) translateY(0);
+  }
+
+  50% {
+    transform: scaleX(var(--icon-flip)) translateY(1rem);
+  }
+}
+
+/* ---- Earth ---- */
+
+.earth-horizon {
+  position: absolute;
+  inset: 0;
+}
+
+.earth-horizon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.earth-clouds span {
+  position: absolute;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 50%);
+  filter: blur(6px);
+}
+
+.earth-clouds span:nth-child(1) {
+  left: 10%;
+  top: 22%;
+  width: 22%;
+  height: 6%;
+}
+
+.earth-clouds span:nth-child(2) {
+  left: 55%;
+  top: 32%;
+  width: 28%;
+  height: 7%;
+}
+
+.earth-clouds span:nth-child(3) {
+  left: 30%;
+  top: 46%;
+  width: 18%;
+  height: 5%;
+}
+
+.earth-clouds span:nth-child(4) {
+  left: 68%;
+  top: 15%;
+  width: 16%;
+  height: 5%;
+}
+
+/* ---- Kármán line ---- */
+
+.karman-banner {
+  position: absolute;
+  inset: 8% 5% auto;
+  z-index: 2;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.1rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #eef3fb;
+  text-shadow: 0 2px 24px rgb(0 0 0 / 60%);
+}
+
+/* ---- Van Allen belts ---- */
+
+.van-allen-field {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.van-allen-field svg {
+  width: min(80vmin, 34rem);
+  height: min(80vmin, 34rem);
+}
+
+.va-earth {
+  fill: #2e6da4;
+}
+
+.va-belt {
+  fill: none;
+  stroke-width: 1.2;
+}
+
+.va-particles circle {
+  fill: #ffb454;
+}
+
+.van-allen-field[data-variant="inner"] .va-belt-inner {
+  stroke: #ffb454;
+  opacity: 0.75;
+}
+
+.van-allen-field[data-variant="inner"] .va-belt-outer {
+  stroke: #ffb454;
+  opacity: 0.2;
+}
+
+.van-allen-field[data-variant="inner"] .va-particles-inner circle {
+  opacity: 0.85;
+}
+
+.van-allen-field[data-variant="inner"] .va-particles-outer circle {
+  opacity: 0.2;
+}
+
+.van-allen-field[data-variant="outer"] .va-belt-outer {
+  stroke: #ffb454;
+  opacity: 0.75;
+}
+
+.van-allen-field[data-variant="outer"] .va-belt-inner {
+  stroke: #ffb454;
+  opacity: 0.2;
+}
+
+.van-allen-field[data-variant="outer"] .va-particles-outer circle {
+  opacity: 0.85;
+}
+
+.van-allen-field[data-variant="outer"] .va-particles-inner circle {
+  opacity: 0.2;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .va-particles circle {
+    animation: belt-pulse 3s ease-in-out infinite;
+  }
+}
+
+@keyframes belt-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ---- solar wind ---- */
+
+.solar-wind-field {
+  position: absolute;
+  inset: 0;
+}
+
+.wind-line {
+  position: absolute;
+  left: 8%;
+  width: 30%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(255 214 166 / 70%), transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wind-line {
+    animation: wind-flow 7s ease-in-out infinite;
+  }
+}
+
+@keyframes wind-flow {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translateX(3rem);
+    opacity: 0.9;
+  }
+}
+
+/* ---- the Moon ---- */
+
+.moon-disc {
+  position: absolute;
+  right: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  filter: drop-shadow(0 0 4rem rgb(255 255 255 / 10%));
+}
+
+.moon-disc svg {
+  display: block;
+}
+
+.moon-disc-approach {
+  width: min(28vw, 12rem);
+}
+
+.moon-disc-approach svg {
+  width: 100%;
+  height: 100%;
+}
+
+.moon-disc-full {
+  width: min(55vw, 26rem);
+}
+
+.moon-disc-full svg {
+  width: 100%;
+  height: 100%;
+}
+
+.moon-crater {
+  fill: rgb(0 0 0 / 12%);
+}
+
+.lunar-surface {
+  position: absolute;
+  inset: auto 0 0;
+  height: 18vh;
+}
+
+.lunar-surface svg {
+  width: 100%;
+  height: 100%;
+}
+
+.lunar-ground {
+  fill: #3a3a3f;
 }
 
 /* ---- sparse decorative touches ---- */
@@ -219,30 +530,6 @@ main#journey {
   }
 }
 
-#moon {
-  overflow: hidden;
-}
-
-#moon::before {
-  content: "";
-  position: absolute;
-  right: -10%;
-  top: 50%;
-  transform: translateY(-50%);
-  width: min(70vw, 32rem);
-  height: min(70vw, 32rem);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 35% 35%,
-    #d8d8dc 0%,
-    #9c9ca2 45%,
-    #6b6b70 75%,
-    #4a4a4f 100%
-  );
-  box-shadow: 0 0 8rem rgb(255 255 255 / 8%);
-  pointer-events: none;
-}
-
 /* ---- responsive ---- */
 
 @media (width <= 640px) {
@@ -261,16 +548,37 @@ main#journey {
     top: 8vh;
   }
 
-  #moon::before {
-    width: 60vw;
-    height: 60vw;
-    right: -20%;
-    opacity: 0.9;
+  .moon-disc-approach {
+    width: min(38vw, 8rem);
+  }
+
+  .moon-disc-full {
+    width: min(78vw, 18rem);
+    right: 2%;
+  }
+
+  .van-allen-field svg {
+    width: min(90vmin, 22rem);
+    height: min(90vmin, 22rem);
+  }
+
+  .karman-banner {
+    font-size: clamp(1rem, 6vw, 1.5rem);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .stop {
     transition: none;
+  }
+
+  .encounter-icon[data-kind="bird"],
+  .encounter-icon[data-kind="insect"],
+  .encounter-icon[data-kind="satellite"],
+  .encounter-icon[data-kind="spacecraft"],
+  .encounter-icon[data-kind="dust"],
+  .va-particles circle,
+  .wind-line {
+    animation: none;
   }
 }
