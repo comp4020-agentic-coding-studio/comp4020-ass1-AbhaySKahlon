@@ -1,0 +1,122 @@
+[
+  {
+    "id": "earth",
+    "distanceKm": 0,
+    "distanceLabel": "0 km",
+    "phase": "Atmosphere",
+    "title": "Earth",
+    "description": "The starting point of the journey."
+  },
+  {
+    "id": "troposphere",
+    "distanceKm": 12,
+    "distanceLabel": "0–12 km",
+    "phase": "Atmosphere",
+    "title": "Troposphere",
+    "description": "Earth's lowest atmospheric layer, containing most of the atmosphere and weather."
+  },
+  {
+    "id": "stratosphere",
+    "distanceKm": 50,
+    "distanceLabel": "12–50 km",
+    "phase": "Atmosphere",
+    "title": "Stratosphere",
+    "description": "A thin, cold atmospheric layer containing the ozone layer."
+  },
+  {
+    "id": "mesosphere",
+    "distanceKm": 85,
+    "distanceLabel": "50–85 km",
+    "phase": "Atmosphere",
+    "title": "Mesosphere",
+    "description": "The coldest atmospheric layer, where many incoming meteoroids burn up."
+  },
+  {
+    "id": "karman-line",
+    "distanceKm": 100,
+    "distanceLabel": "100 km",
+    "phase": "Atmosphere",
+    "title": "Kármán Line",
+    "description": "A conventional boundary commonly used to mark the beginning of space."
+  },
+  {
+    "id": "low-earth-orbit",
+    "distanceKm": 160,
+    "distanceLabel": "~160–2,000 km",
+    "phase": "Orbit",
+    "title": "Low Earth Orbit",
+    "description": "The region of near-Earth space containing many satellites and spacecraft."
+  },
+  {
+    "id": "iss",
+    "distanceKm": 400,
+    "distanceLabel": "~400 km",
+    "phase": "Orbit",
+    "title": "International Space Station",
+    "description": "A continuously inhabited human space laboratory in low Earth orbit."
+  },
+  {
+    "id": "animal-astronauts",
+    "distanceKm": 400,
+    "distanceLabel": "LEO",
+    "phase": "Life",
+    "title": "Animal Astronauts",
+    "description": "Animals have been sent into space to investigate how living organisms respond to spaceflight."
+  },
+  {
+    "id": "inner-van-allen",
+    "distanceKm": 3000,
+    "distanceLabel": "~3,000 km",
+    "phase": "Deep space",
+    "title": "Inner Van Allen Belt",
+    "description": "A region of energetic charged particles trapped by Earth's magnetic field."
+  },
+  {
+    "id": "outer-van-allen",
+    "distanceKm": 17500,
+    "distanceLabel": "~15,000–20,000 km",
+    "phase": "Deep space",
+    "title": "Outer Van Allen Belt",
+    "description": "A second major region of trapped energetic particles surrounding Earth."
+  },
+  {
+    "id": "space-debris",
+    "distanceKm": 800,
+    "distanceLabel": "Orbital environment",
+    "phase": "Deep space",
+    "title": "Space Debris",
+    "description": "Human-made objects and fragments left in orbit, including inactive spacecraft and rocket hardware."
+  },
+  {
+    "id": "deep-space",
+    "distanceKm": 100000,
+    "distanceLabel": "~100,000+ km",
+    "phase": "Deep space",
+    "title": "Deep Space",
+    "description": "The journey becomes dominated by vast stretches of apparently empty space."
+  },
+  {
+    "id": "solar-wind",
+    "distanceKm": 200000,
+    "distanceLabel": "Deep space",
+    "phase": "Deep space",
+    "title": "Solar Wind",
+    "description": "Charged particles continuously flowing outward from the Sun."
+  },
+  {
+    "id": "moon-approach",
+    "distanceKm": 380000,
+    "distanceLabel": "~380,000 km",
+    "phase": "Moon",
+    "title": "Moon Approach",
+    "description": "The Moon becomes increasingly prominent as the journey approaches its destination."
+  },
+  {
+    "id": "moon",
+    "distanceKm": 384400,
+    "distanceLabel": "384,400 km",
+    "phase": "Moon",
+    "title": "The Moon",
+    "description": "The destination of the Earth-to-Moon journey."
+  }
+]

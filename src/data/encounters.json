@@ -1,0 +1,46 @@
+{
+  "troposphere": [
+    { "kind": "cloud", "label": "Clouds and weather, all of it, from here up" },
+    { "kind": "bird", "label": "Ordinary birds, near the top of their range" },
+    { "kind": "insect", "label": "Insects and \"aerial plankton\" lifted on rising air" },
+    { "kind": "bird", "label": "Bar-headed geese — they fly higher than almost any other bird" }
+  ],
+  "stratosphere": [
+    { "kind": "layer", "label": "The ozone layer, absorbing ultraviolet light" },
+    { "kind": "spore", "label": "Bacteria and fungal spores, carried this high by chance" }
+  ],
+  "mesosphere": [
+    { "kind": "meteor", "label": "No birds, no insects — meteoroids burn up as meteors instead" }
+  ],
+  "karman-line": [
+    { "kind": "boundary", "label": "The conventional line between sky and space" }
+  ],
+  "iss": [
+    { "kind": "station", "label": "A continuously inhabited outpost, orbiting every 93 minutes" }
+  ],
+  "animal-astronauts": [
+    { "kind": "animal", "label": "Fruit flies — the first animals sent to space" },
+    { "kind": "animal", "label": "Laika, the first animal to orbit Earth" },
+    { "kind": "animal", "label": "Mice, monkeys, zebrafish, bees, spiders, tardigrades" }
+  ],
+  "inner-van-allen": [
+    { "kind": "radiation", "label": "Energetic particles trapped by Earth's magnetic field — not a solid thing, a field" }
+  ],
+  "outer-van-allen": [
+    { "kind": "radiation", "label": "A second, larger belt of trapped particles further out" }
+  ],
+  "space-debris": [
+    { "kind": "debris", "label": "Inactive satellites and spent rocket stages" },
+    { "kind": "debris", "label": "Fragments as small as flecks of paint, moving fast enough to matter" }
+  ],
+  "deep-space": [
+    { "kind": "empty", "label": "Mostly nothing — the emptiness is the point" }
+  ],
+  "solar-wind": [
+    { "kind": "wind", "label": "A continuous stream of charged particles, flowing outward from the Sun" }
+  ],
+  "moon": [
+    { "kind": "trace", "label": "Footprints that will outlast almost everything built on Earth" },
+    { "kind": "trace", "label": "Landers, rovers and equipment, left where they stopped" }
+  ]
+}

@@ -160,3 +160,70 @@ catching you out, a fact about the stack the agent keeps getting wrong --- write
 it down here. Growing this file is the work of harness engineering, and the gap
 between this boilerplate and your own version is part of what your prototype
 says about the developer you're becoming.
+
+## This project: Deep Space — Earth to Moon
+
+This is a single continuous vertical-scroll journey from Earth's surface to the
+Moon. Scrolling is the entire interaction. There is no navigation between
+"pages", no menu of sections to jump around — the point is one honest,
+continuous journey, and every change should make that journey clearer, not add
+alternative ways to experience it.
+
+- **Scope lock.** This is an Earth-to-Moon vertical journey explainer, not a
+  generic space website. Do not add unrelated space content (other planets,
+  general astronomy trivia, a "gallery", a quiz) unless it's anchored to a real
+  point along the Earth→Moon distance line. If a new idea doesn't have a
+  `distanceKm`, it doesn't belong in the journey.
+- **The dataset is the source of truth.** `src/data/milestones.json` and
+  `src/data/encounters.json` drive the page — section order, section height,
+  and the background gradient are all *generated* from `distanceKm` via
+  `src/lib/journey.ts` and `src/lib/palette.ts`. Don't hand-tune a section's
+  pixel height or color; if something looks wrong, fix the data or the mapping
+  function, not the one section that looks off.
+- **The scale is logarithmic, and the labels must stay honest.** Visual
+  position uses `log10(distanceKm + 1)`, normalised so Earth is 0 and the Moon
+  is 1 (see `toVisualPosition` / `toDistanceKm` in `src/lib/journey.ts`). This
+  is what makes the first 100km (atmosphere, ISS, Van Allen belts) occupy a
+  readable amount of scroll instead of being a rounding error against
+  384,400km. Every displayed distance (Hud, section eyebrows) must still show
+  the real, linear km value — the log scale is for positioning only, never for
+  what the visitor reads as a number.
+- **No scroll-jacking.** `src/scripts/journey-client.ts` only *reads* scroll
+  position (via `getBoundingClientRect`, rAF-throttled) to update the Hud and
+  the active-milestone state. It must never call `scrollTo`, intercept wheel
+  events, or otherwise take control of scrolling away from the browser. Native
+  scroll (mouse, trackpad, touch, Page Up/Down, arrow keys, spacebar) must keep
+  working exactly as it would on any other page.
+- **Static, client-side only.** No backend, no build-time data fetching beyond
+  the local JSON files. Everything the visitor sees comes from the static
+  build plus the one client script.
+- **Keep the accessibility invariants true as you extend content.** One `h1`
+  (on the Earth section only), `lang` set, a real viewport meta, `header`/
+  `nav`/`main` landmarks, visible focus states, no information conveyed by
+  color alone (encounters and phases are always labelled in text, not just
+  tinted), and `prefers-reduced-motion` respected for the meteor and any future
+  animation. These are already true; don't reintroduce a regression while
+  adding content.
+- **The core interaction has a test, and it must stay a contract test.**
+  `spec/assignment-1.test.ts` tests distance → active milestone and the
+  non-linearity of the scale, against the pure functions in
+  `src/lib/journey.ts` — not the DOM. If you touch the mapping logic, update
+  this test's expectations deliberately; don't loosen it to make it pass. Do
+  not write new tests that assert exact DOM structure or CSS values.
+- **Verify the base path, not just `pnpm dev`.** The deployed site lives under
+  `/comp4020-ass1-AbhaySKahlon/` (`astro.config.ts`'s `base`). Currently every
+  asset (CSS, the client script) is inlined into `dist/index.html`, so there
+  are no separate asset URLs to break — if that ever changes (an image, a
+  separate script, a font), check the built `dist/` output under the base
+  path, not just the dev server, before considering it done.
+- **Commit incrementally.** Commit as each piece of the journey becomes real
+  (data layer, then structure, then interaction, then visuals, then each
+  content pass) — not as one large commit at the end. The commit history is
+  read as part of the process evidence for this assignment.
+- **Do not fabricate process evidence.** `PROCESS.md` entries and
+  `reflections/assignment-1.md` must only describe things that actually
+  happened in this repo's history — no invented breakthroughs or moments that
+  didn't occur.
+- **Do not make the repo public, deploy to the live Pages URL, run the ship
+  process, or change repository visibility** unless explicitly asked. The repo
+  stays private during development.

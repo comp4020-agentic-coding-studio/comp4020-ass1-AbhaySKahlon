@@ -1,20 +1,45 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Hud from "../components/Hud.astro";
+import JourneySection from "../components/JourneySection.astro";
+import rawMilestones from "../data/milestones.json";
+import encountersByMilestone from "../data/encounters.json";
+import { sectionHeightsVh, sortedMilestones, toVisualPosition, type Milestone } from "../lib/journey";
+import { colorAt } from "../lib/palette";
+
+const milestones = sortedMilestones(rawMilestones as Milestone[]);
+const heights = sectionHeightsVh(milestones);
+
+// One boundary colour per milestone plus one final boundary past the Moon —
+// each section's top matches the previous section's bottom, so the sky-to-space
+// gradient reads as continuous rather than as fifteen separate backgrounds.
+const boundaries = [
+  ...milestones.map((milestone) => toVisualPosition(milestone.distanceKm)),
+  1,
+];
+const encountersFor = encountersByMilestone as Record<string, { kind: string; label: string }[]>;
 ---
 
-<Layout title="COMP4020 prototype">
+<Layout title="Deep Space: Earth to Moon">
   <header>
     <nav aria-label="Primary">
-      <a href="./">Home</a>
+      <a href="./">Deep Space</a>
     </nav>
   </header>
-  <main>
-    <h1>COMP4020 prototype</h1>
-    <p data-testid="intro">
-      Replace this with your prototype. This week's brief is on the course
-      website; <code>spec/README.md</code> explains how the checks in this repo
-      relate to it.
-    </p>
+  <Hud />
+  <main id="journey">
+    {
+      milestones.map((milestone, index) => (
+        <JourneySection
+          milestone={milestone}
+          encounters={encountersFor[milestone.id] ?? []}
+          heightVh={heights[index]}
+          skyTop={colorAt(boundaries[index])}
+          skyBottom={colorAt(boundaries[index + 1])}
+          isFirst={index === 0}
+        />
+      ))
+    }
   </main>
-  <script src="../scripts/main.ts"></script>
+  <script src="../scripts/journey-client.ts"></script>
 </Layout>

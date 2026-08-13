@@ -1,0 +1,44 @@
+---
+import type { Milestone } from "../lib/journey";
+
+export interface Encounter {
+  kind: string;
+  label: string;
+}
+
+export interface Props {
+  milestone: Milestone;
+  encounters: Encounter[];
+  heightVh: number;
+  skyTop: string;
+  skyBottom: string;
+  isFirst: boolean;
+}
+
+const { milestone, encounters, heightVh, skyTop, skyBottom, isFirst } = Astro.props;
+const phaseSlug = milestone.phase.toLowerCase().replace(/\s+/g, "-");
+---
+
+<section
+  id={milestone.id}
+  class="stop"
+  data-phase={phaseSlug}
+  data-distance-km={milestone.distanceKm}
+  style={`min-height:${heightVh}vh;--sky-top:${skyTop};--sky-bottom:${skyBottom}`}
+>
+  <div class="stop-content">
+    {isFirst && <h1>Deep Space: Earth to Moon</h1>}
+    <p class="stop-eyebrow">{milestone.phase} · {milestone.distanceLabel}</p>
+    <h2>{milestone.title}</h2>
+    <p class="stop-description">{milestone.description}</p>
+    {
+      encounters.length > 0 && (
+        <ul class="stop-encounters" aria-label={`Encountered near ${milestone.title}`}>
+          {encounters.map((encounter) => (
+            <li data-kind={encounter.kind}>{encounter.label}</li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</section>

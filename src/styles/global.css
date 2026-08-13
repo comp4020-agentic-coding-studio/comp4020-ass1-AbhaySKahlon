@@ -1,16 +1,276 @@
-body {
-  margin: 0;
-  padding: 2rem;
-  font-family: system-ui, sans-serif;
-  line-height: 1.6;
-  color: #1a1a1a;
+/* Deep Space: Earth to Moon — one continuous vertical journey. The sky-to-space
+   gradient is generated per-section from src/lib/palette.ts; everything here is
+   the shared chrome: typography, the Hud, the content panel, and the sparse
+   decorative touches (meteor, starfield, the Moon itself). */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-main {
-  max-width: 40rem;
-  margin: 0 auto;
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+  color: #eef3fb;
+  background: #02030a;
+  overflow-x: hidden;
 }
 
 a {
-  color: #0b5fff;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid #ffd166;
+  outline-offset: 3px;
+}
+
+/* ---- header / nav ---- */
+
+header {
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: 20;
+  padding: 1rem 1.25rem;
+}
+
+header nav a {
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-size: 0.9rem;
+  color: #eef3fb;
+  background: rgb(4 10 20 / 55%);
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+}
+
+/* ---- Hud ---- */
+
+.hud {
+  position: fixed;
+  inset: auto 1.25rem 1.25rem auto;
+  z-index: 20;
+  text-align: right;
+  background: rgb(4 10 20 / 55%);
+  backdrop-filter: blur(6px);
+  border-radius: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  min-width: 11rem;
+}
+
+.hud p {
+  margin: 0;
+}
+
+.hud-distance {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-route {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 0.15rem;
+}
+
+.hud-milestone {
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  opacity: 0.9;
+}
+
+.hud-scale-note {
+  font-size: 0.65rem;
+  opacity: 0.55;
+  margin-top: 0.5rem;
+}
+
+/* ---- the journey ---- */
+
+main#journey {
+  position: relative;
+}
+
+.stop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom));
+  transition: background-color 0.6s ease;
+}
+
+.stop-content {
+  position: sticky;
+  top: 14vh;
+  max-width: 34rem;
+  width: 100%;
+  background: rgb(4 10 20 / 55%);
+  color: #eef3fb;
+  padding: 1.75rem 2rem;
+  border-radius: 0.9rem;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 20px 60px rgb(0 0 0 / 35%);
+}
+
+.stop-content h1 {
+  font-size: 1.5rem;
+  margin: 0 0 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.stop-content h2 {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 1.6rem;
+}
+
+.stop-eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.stop-description {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.stop-encounters {
+  list-style: none;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stop-encounters li {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  padding-left: 1rem;
+  border-left: 2px solid rgb(238 243 251 / 35%);
+}
+
+/* ---- sparse decorative touches ---- */
+
+.stop[data-phase="deep-space"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(1px 1px at 12% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 78% 65%, #fff, transparent),
+    radial-gradient(1px 1px at 45% 80%, #fff, transparent),
+    radial-gradient(1px 1px at 88% 15%, #fff, transparent),
+    radial-gradient(1px 1px at 30% 45%, #fff, transparent);
+  opacity: 0.35;
+}
+
+#mesosphere::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 6rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ffe8a3, transparent);
+  transform: rotate(35deg);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #mesosphere::after {
+    animation: meteor 4.5s ease-in infinite;
+  }
+}
+
+@keyframes meteor {
+  0%,
+  60% {
+    opacity: 0;
+    transform: rotate(35deg) translateX(-2rem);
+  }
+
+  65% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0;
+    transform: rotate(35deg) translateX(2rem);
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+#moon {
+  overflow: hidden;
+}
+
+#moon::before {
+  content: "";
+  position: absolute;
+  right: -10%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(70vw, 32rem);
+  height: min(70vw, 32rem);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    #d8d8dc 0%,
+    #9c9ca2 45%,
+    #6b6b70 75%,
+    #4a4a4f 100%
+  );
+  box-shadow: 0 0 8rem rgb(255 255 255 / 8%);
+  pointer-events: none;
+}
+
+/* ---- responsive ---- */
+
+@media (width <= 640px) {
+  .hud {
+    inset: auto 0.75rem 0.75rem auto;
+    padding: 0.65rem 0.85rem;
+    min-width: 9rem;
+  }
+
+  .hud-distance {
+    font-size: 1.15rem;
+  }
+
+  .stop-content {
+    padding: 1.25rem 1.4rem;
+    top: 8vh;
+  }
+
+  #moon::before {
+    width: 60vw;
+    height: 60vw;
+    right: -20%;
+    opacity: 0.9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stop {
+    transition: none;
+  }
 }

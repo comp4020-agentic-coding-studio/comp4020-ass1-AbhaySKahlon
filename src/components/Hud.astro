@@ -1,0 +1,17 @@
+---
+// Persistent, unobtrusive: distance, phase and the active milestone are the
+// answer to "where am I, how far, what phase" from anywhere in the journey.
+// It's a supplement, not the only place this information lives — every
+// section repeats its own title and distance label in the normal reading
+// order, so nothing here is communicated only through the Hud.
+---
+
+<aside class="hud" aria-hidden="true">
+  <p class="hud-distance"><span id="hud-distance-value">0 km</span></p>
+  <p class="hud-route">Earth → Moon</p>
+  <p class="hud-milestone">
+    <span id="hud-phase">Atmosphere</span><span class="hud-sep"> · </span
+    ><span id="hud-title">Earth</span>
+  </p>
+  <p class="hud-scale-note">Journey scale: logarithmic</p>
+</aside>
