@@ -1,6 +1,7 @@
 ---
 import type { Milestone } from "../lib/journey";
 import EncounterField from "./EncounterField.astro";
+import AnimalAstronauts from "./scenes/AnimalAstronauts.astro";
 import DebrisField from "./scenes/DebrisField.astro";
 import DeepSpaceField from "./scenes/DeepSpaceField.astro";
 import EarthHorizon from "./scenes/EarthHorizon.astro";
@@ -48,6 +49,7 @@ const encounterBand =
     {milestone.id === "karman-line" && <KarmanHorizon />}
     {milestone.id === "low-earth-orbit" && <OrbitHorizon />}
     {milestone.id === "iss" && <IssStructure />}
+    {milestone.id === "animal-astronauts" && <AnimalAstronauts />}
     {milestone.id === "space-debris" && <DebrisField />}
     {milestone.id === "inner-van-allen" && <VanAllenField variant="inner" />}
     {milestone.id === "outer-van-allen" && <VanAllenField variant="outer" />}

@@ -382,6 +382,151 @@ main#journey {
   fill: #dfe6ee;
 }
 
+/* ---- animal astronauts ---- */
+
+/* A dog tumbling in a spacesuit: helmet + floppy ears + snout carry the
+   "animal" read reliably; body, legs, tail, backpack and tether carry the
+   "astronaut in zero-g" read. Two small fruit flies sit further back and
+   fainter for depth (the fruit-fly encounter), and a scatter of motes give
+   a sense of weightlessness without any of it moving fast or far. */
+
+.animal-astronauts-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 4vh 3vw;
+}
+
+.animal-astronauts-scene svg {
+  width: min(92vmin, 50rem);
+  height: auto;
+  overflow: visible;
+}
+
+.dog-tail,
+.dog-body,
+.dog-leg {
+  fill: #cf8548;
+}
+
+.dog-leg-back {
+  fill: #b97239;
+}
+
+.dog-paw {
+  fill: #dfe6ee;
+}
+
+.dog-paw-back {
+  fill: #c7d3e0;
+}
+
+.dog-pack {
+  fill: #c7d3e0;
+}
+
+.dog-antenna {
+  stroke: #eef3fb;
+  stroke-width: 0.8;
+  opacity: 0.8;
+}
+
+.dog-antenna-tip {
+  fill: #eef3fb;
+  opacity: 0.8;
+}
+
+.dog-collar {
+  fill: #c7d3e0;
+}
+
+.dog-ear {
+  fill: #8a5a35;
+}
+
+.dog-ear-back {
+  fill: #74492b;
+}
+
+.dog-helmet {
+  fill: #e7ecf2;
+}
+
+.dog-snout {
+  fill: #8a5a35;
+}
+
+.dog-nose {
+  fill: #20140c;
+}
+
+.dog-visor {
+  fill: rgb(191 228 255 / 35%);
+  stroke: #eef3fb;
+  stroke-width: 0.6;
+  opacity: 0.9;
+}
+
+.dog-visor-highlight {
+  stroke: #f4faff;
+  stroke-width: 1;
+  opacity: 0.7;
+}
+
+.dog-tether {
+  stroke: #c7d3e0;
+  stroke-width: 0.8;
+  opacity: 0.55;
+}
+
+.dog-tether-clip {
+  fill: #c7d3e0;
+  opacity: 0.8;
+}
+
+.fruit-fly .fly-body,
+.fruit-fly .fly-head {
+  fill: #6b5844;
+  opacity: 0.55;
+}
+
+.fruit-fly .fly-wing {
+  fill: #a9998a;
+  opacity: 0.35;
+}
+
+.fruit-fly-far {
+  opacity: 0.7;
+}
+
+.astro-mote {
+  fill: #eef3fb;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dog-astronaut-drift {
+    animation: dog-tumble 9s ease-in-out infinite;
+    transform-origin: -10px 0;
+  }
+
+  .astro-mote {
+    animation: star-twinkle 6s ease-in-out infinite;
+  }
+}
+
+@keyframes dog-tumble {
+  0%,
+  100% {
+    transform: rotate(-2deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(2deg) translateY(-1.5px);
+  }
+}
+
 /* ---- space debris ---- */
 
 .debris-field {
@@ -854,6 +999,16 @@ main#journey {
   .iss-structure svg {
     width: min(92vmin, 26rem);
   }
+
+  .animal-astronauts-scene {
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 6vh;
+  }
+
+  .animal-astronauts-scene svg {
+    width: min(88vmin, 22rem);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -868,6 +1023,8 @@ main#journey {
   .encounter-icon[data-kind="dust"],
   .va-particles circle,
   .wind-line,
+  .dog-astronaut-drift,
+  .astro-mote,
   .stop[data-phase="deep-space"]::after,
   .stop[data-phase="moon"]::after {
     animation: none;
