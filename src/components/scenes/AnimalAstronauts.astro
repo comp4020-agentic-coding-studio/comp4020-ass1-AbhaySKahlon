@@ -17,7 +17,46 @@ const motes = [
 ---
 
 <div class="animal-astronauts-scene" aria-hidden="true">
+  <div class="animal-astronaut-glow"></div>
   <svg viewBox="0 0 200 140" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <linearGradient id="dog-fur-shade" x1="0.15" y1="0.05" x2="0.8" y2="0.95">
+        <stop offset="0%" stop-color="#d9a171" />
+        <stop offset="45%" stop-color="#b87a45" />
+        <stop offset="100%" stop-color="#6e4526" />
+      </linearGradient>
+      <linearGradient id="dog-fur-shade-recede" x1="0.15" y1="0.05" x2="0.8" y2="0.95">
+        <stop offset="0%" stop-color="#a97a4c" />
+        <stop offset="100%" stop-color="#523321" />
+      </linearGradient>
+      <linearGradient id="dog-ear-shade" x1="0.15" y1="0" x2="0.85" y2="1">
+        <stop offset="0%" stop-color="#7d5535" />
+        <stop offset="100%" stop-color="#3a2314" />
+      </linearGradient>
+      <radialGradient id="dog-helmet-shade" cx="34%" cy="26%" r="78%">
+        <stop offset="0%" stop-color="#f2f5f9" />
+        <stop offset="55%" stop-color="#b9c2ce" />
+        <stop offset="100%" stop-color="#666e79" />
+      </radialGradient>
+      <radialGradient id="dog-pack-shade" cx="30%" cy="22%" r="85%">
+        <stop offset="0%" stop-color="#dfe6ee" />
+        <stop offset="100%" stop-color="#7a8493" />
+      </radialGradient>
+      <linearGradient id="dog-visor-shade" x1="0.15" y1="0" x2="0.8" y2="1">
+        <stop offset="0%" stop-color="#eaf6ff" stop-opacity="0.55" />
+        <stop offset="55%" stop-color="#7fc4f5" stop-opacity="0.3" />
+        <stop offset="100%" stop-color="#0f2c47" stop-opacity="0.4" />
+      </linearGradient>
+      <filter id="dog-soft-shadow" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="3.5" result="blur" />
+        <feOffset in="blur" dx="0" dy="2.5" result="offset" />
+        <feColorMatrix
+          in="offset"
+          type="matrix"
+          values="0 0 0 0 0.01  0 0 0 0 0.03  0 0 0 0 0.07  0 0 0 0.5 0"
+        />
+      </filter>
+    </defs>
     <g class="fruit-fly" transform="translate(36 28)">
       <ellipse class="fly-wing" cx="-3" cy="-3" rx="5" ry="2.4" transform="rotate(-20 -3 -3)" />
       <ellipse class="fly-wing" cx="3" cy="-3" rx="5" ry="2.4" transform="rotate(20 3 -3)" />
@@ -39,7 +78,7 @@ const motes = [
     <ellipse class="dog-tether-clip" cx="96" cy="36" rx="3" ry="2.4" />
 
     <g class="dog-astronaut-position" transform="translate(120 70) rotate(-14) scale(0.95)">
-      <g class="dog-astronaut-drift">
+      <g class="dog-astronaut-drift" filter="url(#dog-soft-shadow)">
         <path
           class="dog-tail"
           d="M -68 -6 C -78 -14 -80 -26 -74 -34 C -70 -30 -66 -20 -62 -10 C -64 -8 -66 -7 -68 -6 Z"
@@ -75,10 +114,10 @@ const motes = [
         <path class="dog-ear dog-ear-back" d="M 30 -38 C 24 -34 22 -24 28 -16 C 34 -18 36 -28 34 -36 Z" />
         <path class="dog-ear" d="M 60 -40 C 68 -46 72 -40 68 -30 C 64 -26 58 -28 56 -34 Z" />
 
-        <circle class="dog-helmet" cx="46" cy="-24" r="22" />
-        <ellipse class="dog-snout" cx="64" cy="-18" rx="9" ry="7" />
-        <circle class="dog-nose" cx="70" cy="-18" r="2" />
-        <ellipse class="dog-visor" cx="49" cy="-26" rx="17" ry="15" />
+        <circle class="dog-helmet" cx="46" cy="-24" r="20" />
+        <ellipse class="dog-snout" cx="63" cy="-18" rx="7.5" ry="6" />
+        <circle class="dog-nose" cx="69" cy="-18" r="1.7" />
+        <ellipse class="dog-visor" cx="48" cy="-26" rx="15.5" ry="13.5" />
         <path class="dog-visor-highlight" d="M 38 -34 Q 44 -38 50 -35" fill="none" />
       </g>
     </g>

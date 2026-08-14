@@ -405,26 +405,40 @@ main#journey {
   overflow: visible;
 }
 
+/* A soft, blurred glow behind the dog (same technique as .deep-space-glow)
+   so the scene sits *in* the surrounding space rather than floating as a flat
+   cutout on top of it. */
+.animal-astronaut-glow {
+  position: absolute;
+  right: 6%;
+  top: 20%;
+  width: min(60vmin, 32rem);
+  height: min(60vmin, 32rem);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(159 196 235 / 16%), transparent 70%);
+  filter: blur(2.5rem);
+}
+
 .dog-tail,
 .dog-body,
 .dog-leg {
-  fill: #cf8548;
+  fill: url("#dog-fur-shade");
 }
 
 .dog-leg-back {
-  fill: #b97239;
+  fill: url("#dog-fur-shade-recede");
 }
 
 .dog-paw {
-  fill: #dfe6ee;
+  fill: url("#dog-pack-shade");
 }
 
 .dog-paw-back {
-  fill: #c7d3e0;
+  fill: #8892a0;
 }
 
 .dog-pack {
-  fill: #c7d3e0;
+  fill: url("#dog-pack-shade");
 }
 
 .dog-antenna {
@@ -439,31 +453,39 @@ main#journey {
 }
 
 .dog-collar {
-  fill: #c7d3e0;
+  fill: url("#dog-pack-shade");
 }
 
 .dog-ear {
-  fill: #8a5a35;
+  fill: url("#dog-ear-shade");
 }
 
 .dog-ear-back {
-  fill: #74492b;
+  fill: url("#dog-ear-shade");
+  opacity: 0.85;
 }
 
 .dog-helmet {
-  fill: #e7ecf2;
+  fill: url("#dog-helmet-shade");
 }
 
 .dog-snout {
-  fill: #8a5a35;
+  fill: url("#dog-ear-shade");
 }
 
 .dog-nose {
-  fill: #20140c;
+  fill: #180f08;
+}
+
+.dog-body,
+.dog-helmet {
+  stroke: #bcd8f2;
+  stroke-width: 0.4;
+  stroke-opacity: 0.35;
 }
 
 .dog-visor {
-  fill: rgb(191 228 255 / 35%);
+  fill: url("#dog-visor-shade");
   stroke: #eef3fb;
   stroke-width: 0.6;
   opacity: 0.9;
