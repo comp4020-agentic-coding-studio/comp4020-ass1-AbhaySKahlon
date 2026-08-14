@@ -574,7 +574,9 @@ main#journey {
 }
 
 .moon-disc-full {
-  width: min(55vw, 26rem);
+  width: min(68vw, 40rem);
+  right: -4%;
+  filter: drop-shadow(0 0 6rem rgb(255 255 255 / 16%));
 }
 
 .moon-disc-full svg {
@@ -582,8 +584,27 @@ main#journey {
   height: 100%;
 }
 
+.moon-mare {
+  fill: #3d4550;
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+}
+
 .moon-crater {
-  fill: rgb(0 0 0 / 12%);
+  mix-blend-mode: multiply;
+}
+
+.moon-crater-rim {
+  fill: none;
+  stroke: #e8e8ea;
+  stroke-width: 0.35;
+  opacity: 0.35;
+}
+
+.moon-texture {
+  fill: #808080;
+  opacity: 0.14;
+  mix-blend-mode: overlay;
 }
 
 .lunar-surface {
@@ -807,8 +828,9 @@ main#journey {
   }
 
   .moon-disc-full {
-    width: min(78vw, 18rem);
-    right: 2%;
+    width: min(92vw, 24rem);
+    inset: auto auto 14vh 50%;
+    transform: translateX(-50%);
   }
 
   .van-allen-field svg {

@@ -1,29 +1,65 @@
 ---
-// The Moon rendered as a shaded disc rather than a flat grey circle, at two
-// sizes so it visibly grows between "moon-approach" and "moon" instead of
-// appearing at full size in one step.
+// The Moon rendered as a shaded, cratered, mottled disc rather than a flat
+// grey circle, at two sizes so it visibly grows between "moon-approach" and
+// "moon" instead of appearing at full size in one step. Realism comes from
+// layering (base tonal gradient -> dark mare patches -> individually
+// gradient-shaded craters -> a faint procedural surface grain), all native
+// SVG, no external image — the rest of the build stays a single inlined
+// dist/index.html with no separate asset pipeline to keep working under the
+// GitHub Pages base path.
 export interface Props {
   size: "approach" | "full";
 }
 
 const { size } = Astro.props;
 const gradientId = `moon-shade-${size}`;
+const craterShadeId = `moon-crater-shade-${size}`;
+const noiseFilterId = `moon-noise-${size}`;
 ---
 
 <div class={`moon-disc moon-disc-${size}`} aria-hidden="true">
   <svg viewBox="0 0 100 100">
     <defs>
-      <radialGradient id={gradientId} cx="35%" cy="35%" r="70%">
-        <stop offset="0%" stop-color="#e6e6ea" />
-        <stop offset="55%" stop-color="#aaaab0" />
-        <stop offset="100%" stop-color="#5c5c61" />
+      <radialGradient id={gradientId} cx="32%" cy="30%" r="75%">
+        <stop offset="0%" stop-color="#f4f4f2" />
+        <stop offset="35%" stop-color="#d9d9d6" />
+        <stop offset="60%" stop-color="#a8a8ac" />
+        <stop offset="82%" stop-color="#75757c" />
+        <stop offset="100%" stop-color="#45454b" />
       </radialGradient>
+      <radialGradient id={craterShadeId} cx="32%" cy="28%" r="75%">
+        <stop offset="0%" stop-color="#f2f2f4" stop-opacity="0.35" />
+        <stop offset="45%" stop-color="#6c6c72" stop-opacity="0.22" />
+        <stop offset="100%" stop-color="#161619" stop-opacity="0.55" />
+      </radialGradient>
+      <filter id={noiseFilterId} x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="grain" />
+        <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0" />
+      </filter>
     </defs>
     <circle cx="50" cy="50" r="46" fill={`url(#${gradientId})`} />
-    <circle cx="34" cy="38" r="6" class="moon-crater" />
-    <circle cx="61" cy="30" r="4" class="moon-crater" />
-    <circle cx="66" cy="58" r="8" class="moon-crater" />
-    <circle cx="40" cy="67" r="4.5" class="moon-crater" />
-    <circle cx="25" cy="58" r="3" class="moon-crater" />
+    <path
+      class="moon-mare"
+      d="M30 32 C24 30 20 38 22 45 C24 52 32 56 40 54 C48 52 50 44 46 38 C43 33 36 33 30 32 Z"
+    />
+    <path
+      class="moon-mare"
+      d="M60 55 C56 53 52 58 54 63 C56 68 63 70 68 66 C72 62 71 56 66 54 C64 53 62 54 60 55 Z"
+    />
+    <circle cx="34" cy="38" r="6" class="moon-crater" fill={`url(#${craterShadeId})`} />
+    <circle
+      cx="34"
+      cy="38"
+      r="6"
+      class="moon-crater-rim"
+    />
+    <circle cx="61" cy="30" r="4" class="moon-crater" fill={`url(#${craterShadeId})`} />
+    <circle cx="66" cy="58" r="8" class="moon-crater" fill={`url(#${craterShadeId})`} />
+    <circle cx="66" cy="58" r="8" class="moon-crater-rim" />
+    <circle cx="40" cy="67" r="4.5" class="moon-crater" fill={`url(#${craterShadeId})`} />
+    <circle cx="25" cy="58" r="3" class="moon-crater" fill={`url(#${craterShadeId})`} />
+    <circle cx="78" cy="44" r="2.6" class="moon-crater" fill={`url(#${craterShadeId})`} />
+    <circle cx="46" cy="24" r="2.2" class="moon-crater" fill={`url(#${craterShadeId})`} />
+    <circle cx="50" cy="50" r="46" class="moon-texture" filter={`url(#${noiseFilterId})`} />
   </svg>
 </div>
