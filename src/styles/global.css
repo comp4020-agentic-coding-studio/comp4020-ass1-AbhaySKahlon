@@ -432,6 +432,8 @@ main#journey {
 }
 
 .animal-astronauts-scene svg {
+  position: relative;
+  z-index: 1;
   width: min(92vmin, 50rem);
   height: auto;
   overflow: visible;
