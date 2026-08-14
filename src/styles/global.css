@@ -346,12 +346,13 @@ main#journey {
   position: absolute;
   inset: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
+  padding-bottom: 6vh;
 }
 
 .iss-structure svg {
-  width: min(85vmin, 40rem);
+  width: min(98vmin, 64rem);
   height: auto;
 }
 
@@ -419,19 +420,19 @@ main#journey {
 }
 
 .deep-space-glow-a {
-  width: 70vmin;
-  height: 70vmin;
-  left: -10%;
-  top: 10%;
-  background: radial-gradient(circle, rgb(143 208 255 / 14%), transparent 70%);
+  width: 95vmin;
+  height: 95vmin;
+  left: -15%;
+  top: 2%;
+  background: radial-gradient(circle, rgb(143 208 255 / 22%), transparent 70%);
 }
 
 .deep-space-glow-b {
-  width: 90vmin;
-  height: 90vmin;
-  right: -20%;
-  bottom: -10%;
-  background: radial-gradient(circle, rgb(191 228 255 / 10%), transparent 70%);
+  width: 120vmin;
+  height: 120vmin;
+  right: -25%;
+  bottom: -20%;
+  background: radial-gradient(circle, rgb(191 228 255 / 16%), transparent 70%);
 }
 
 /* ---- Van Allen belts ---- */
@@ -819,8 +820,12 @@ main#journey {
     font-size: clamp(1rem, 6vw, 1.5rem);
   }
 
+  .iss-structure {
+    padding-bottom: 4vh;
+  }
+
   .iss-structure svg {
-    width: min(85vmin, 22rem);
+    width: min(92vmin, 26rem);
   }
 }
 
