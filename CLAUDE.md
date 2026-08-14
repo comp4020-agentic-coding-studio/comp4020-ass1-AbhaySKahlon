@@ -252,14 +252,21 @@ added *behind* the existing cards:
   matching icon — don't add a one-off `<img>` or inline SVG for a single
   encounter instead of adding an icon to the shared set.
 - **Only a handful of milestones get a bespoke scene component**: `earth`
-  (horizon/clouds), `karman-line` (the transition banner), `inner-van-allen` /
-  `outer-van-allen` (the belts, via `VanAllenField` with a `variant` prop —
-  don't create a third component for a third belt that doesn't exist),
-  `solar-wind` (particle flow), and `moon-approach` / `moon` (the growing Moon
-  disc plus, only at `moon`, the lunar ground). Every other milestone relies on
-  `EncounterField` alone. Don't add a bespoke scene for a milestone that
-  doesn't need one — that's exactly the over-decoration the spec warned
-  against.
+  (horizon/clouds), `karman-line` (`KarmanHorizon` — the Earth-limb/haze
+  visual — plus `KarmanBanner`, the real, visible transition text),
+  `low-earth-orbit` (`OrbitHorizon` — a shallower limb plus a dashed orbital
+  path and satellite silhouette), `iss` (`IssStructure` — a large schematic
+  truss/module/solar-array silhouette), `space-debris` (`DebrisField` — many
+  deterministically placed fragments of varied size/opacity for depth),
+  `inner-van-allen` / `outer-van-allen` (the belts, via `VanAllenField` with a
+  `variant` prop — don't create a third component for a third belt that
+  doesn't exist), `solar-wind` (particle flow), `deep-space` (`DeepSpaceField`
+  — two large soft low-opacity glows for vastness, layered behind the Step 3
+  starfield, not a replacement for it), and `moon-approach` / `moon` (the
+  growing Moon disc plus, only at `moon`, the lunar ground). Every other
+  milestone relies on `EncounterField` alone. Don't add a bespoke scene for a
+  milestone that doesn't need one — that's exactly the over-decoration the
+  spec warned against.
 - **The Kármán line's blue-to-black flip is intentional palette tuning, not a
   bug.** `src/lib/palette.ts`'s keyframes are deliberately bunched around
   `toVisualPosition(100km)` (~0.36) so the sky visibly flips to space right at

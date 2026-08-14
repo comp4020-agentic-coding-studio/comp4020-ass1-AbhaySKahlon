@@ -1,0 +1,35 @@
+---
+// Higher than the Kármán line, so Earth's limb reads as thinner and further
+// down the frame — mostly black space with a sliver of curvature — plus the
+// orbital path itself: a dashed ellipse with one schematic satellite on it,
+// so "orbital altitude" is a shape you see, not a word in the eyebrow text.
+---
+
+<div class="orbit-horizon" aria-hidden="true">
+  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="orbit-limb" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#123a5e" />
+        <stop offset="100%" stop-color="#020409" />
+      </linearGradient>
+    </defs>
+    <path d="M0 100 L0 97 Q50 91 100 97 L100 100 Z" fill="url(#orbit-limb)" />
+    <path d="M0 97 Q50 91 100 97" fill="none" stroke="#8fd0ff" stroke-width="0.5" opacity="0.6" />
+    <ellipse
+      cx="50"
+      cy="58"
+      rx="46"
+      ry="15"
+      fill="none"
+      stroke="#eef3fb"
+      stroke-width="0.3"
+      stroke-dasharray="1.4 2.2"
+      opacity="0.35"
+    />
+    <g class="orbit-satellite" transform="translate(80, 49)">
+      <rect x="-6.5" y="-2.2" width="3.4" height="4.4" fill="#8fd0ff" opacity="0.85" />
+      <rect x="3.1" y="-2.2" width="3.4" height="4.4" fill="#8fd0ff" opacity="0.85" />
+      <rect x="-3.2" y="-1" width="6.4" height="2" fill="#eef3fb" />
+    </g>
+  </svg>
+</div>

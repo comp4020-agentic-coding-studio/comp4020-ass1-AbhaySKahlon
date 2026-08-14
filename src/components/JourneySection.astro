@@ -1,10 +1,15 @@
 ---
 import type { Milestone } from "../lib/journey";
 import EncounterField from "./EncounterField.astro";
+import DebrisField from "./scenes/DebrisField.astro";
+import DeepSpaceField from "./scenes/DeepSpaceField.astro";
 import EarthHorizon from "./scenes/EarthHorizon.astro";
+import IssStructure from "./scenes/IssStructure.astro";
 import KarmanBanner from "./scenes/KarmanBanner.astro";
+import KarmanHorizon from "./scenes/KarmanHorizon.astro";
 import LunarSurface from "./scenes/LunarSurface.astro";
 import MoonDisc from "./scenes/MoonDisc.astro";
+import OrbitHorizon from "./scenes/OrbitHorizon.astro";
 import SolarWindField from "./scenes/SolarWindField.astro";
 import VanAllenField from "./scenes/VanAllenField.astro";
 
@@ -40,9 +45,14 @@ const encounterBand =
 >
   <div class="stop-scene" aria-hidden="true">
     {milestone.id === "earth" && <EarthHorizon />}
+    {milestone.id === "karman-line" && <KarmanHorizon />}
+    {milestone.id === "low-earth-orbit" && <OrbitHorizon />}
+    {milestone.id === "iss" && <IssStructure />}
+    {milestone.id === "space-debris" && <DebrisField />}
     {milestone.id === "inner-van-allen" && <VanAllenField variant="inner" />}
     {milestone.id === "outer-van-allen" && <VanAllenField variant="outer" />}
     {milestone.id === "solar-wind" && <SolarWindField />}
+    {milestone.id === "deep-space" && <DeepSpaceField />}
     {milestone.id === "moon-approach" && <MoonDisc size="approach" />}
     {milestone.id === "moon" && <MoonDisc size="full" />}
     {milestone.id === "moon" && <LunarSurface />}

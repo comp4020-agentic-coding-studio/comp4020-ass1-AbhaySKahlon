@@ -318,6 +318,122 @@ main#journey {
   text-shadow: 0 2px 24px rgb(0 0 0 / 60%);
 }
 
+.karman-horizon {
+  position: absolute;
+  inset: 0;
+}
+
+.karman-horizon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- low Earth orbit ---- */
+
+.orbit-horizon {
+  position: absolute;
+  inset: 0;
+}
+
+.orbit-horizon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- ISS ---- */
+
+.iss-structure {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iss-structure svg {
+  width: min(85vmin, 40rem);
+  height: auto;
+}
+
+.iss-array rect {
+  fill: #3f6fa8;
+  opacity: 0.9;
+}
+
+.iss-array line {
+  stroke: #c7d3e0;
+  stroke-width: 0.4;
+  opacity: 0.6;
+}
+
+.iss-truss {
+  fill: #c7d3e0;
+}
+
+.iss-radiator {
+  fill: none;
+  stroke: #eef3fb;
+  stroke-width: 0.4;
+  opacity: 0.7;
+}
+
+.iss-module {
+  fill: #dfe6ee;
+}
+
+/* ---- space debris ---- */
+
+.debris-field {
+  position: absolute;
+  inset: 0;
+}
+
+.debris-field svg {
+  width: 100%;
+  height: 100%;
+}
+
+.debris-field polygon {
+  fill: #b7c4d6;
+}
+
+.debris-arc {
+  stroke: #eef3fb;
+  stroke-width: 0.3;
+  stroke-dasharray: 1.2 2;
+  opacity: 0.25;
+}
+
+/* ---- deep space ---- */
+
+.deep-space-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.deep-space-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(3rem);
+}
+
+.deep-space-glow-a {
+  width: 70vmin;
+  height: 70vmin;
+  left: -10%;
+  top: 10%;
+  background: radial-gradient(circle, rgb(143 208 255 / 14%), transparent 70%);
+}
+
+.deep-space-glow-b {
+  width: 90vmin;
+  height: 90vmin;
+  right: -20%;
+  bottom: -10%;
+  background: radial-gradient(circle, rgb(191 228 255 / 10%), transparent 70%);
+}
+
 /* ---- Van Allen belts ---- */
 
 .van-allen-field {
@@ -701,6 +817,10 @@ main#journey {
 
   .karman-banner {
     font-size: clamp(1rem, 6vw, 1.5rem);
+  }
+
+  .iss-structure svg {
+    width: min(85vmin, 22rem);
   }
 }
 

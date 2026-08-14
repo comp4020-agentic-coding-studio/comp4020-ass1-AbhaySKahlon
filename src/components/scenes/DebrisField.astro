@@ -1,0 +1,49 @@
+---
+// A field of orbital clutter, not a diagram: many small irregular fragments
+// at deliberately varied size/opacity (larger + brighter reads as "closer")
+// plus two faint dashed arcs for orbital context. Coordinates are hand-placed
+// and fixed, not Math.random, so the layout never shifts between builds.
+const jaggedPoints = "-1,-0.6 0.8,-1 1,0.4 0.3,1 -0.9,0.6";
+const panelPoints = "-1,-0.5 1,-0.6 0.9,0.5 -0.8,0.6";
+
+const fragments = [
+  { x: 10, y: 18, size: 4.2, rot: 12, opacity: 0.85, shape: "panel" },
+  { x: 26, y: 42, size: 2.1, rot: 50, opacity: 0.4, shape: "jag" },
+  { x: 18, y: 68, size: 3, rot: -20, opacity: 0.55, shape: "jag" },
+  { x: 38, y: 24, size: 1.6, rot: 80, opacity: 0.3, shape: "jag" },
+  { x: 48, y: 55, size: 3.6, rot: 30, opacity: 0.7, shape: "panel" },
+  { x: 60, y: 15, size: 2, rot: -45, opacity: 0.35, shape: "jag" },
+  { x: 68, y: 38, size: 4.6, rot: 8, opacity: 0.9, shape: "panel" },
+  { x: 74, y: 70, size: 1.8, rot: 60, opacity: 0.3, shape: "jag" },
+  { x: 82, y: 22, size: 2.6, rot: -30, opacity: 0.5, shape: "jag" },
+  { x: 88, y: 48, size: 3.2, rot: 15, opacity: 0.65, shape: "panel" },
+  { x: 6, y: 82, size: 2.2, rot: 40, opacity: 0.4, shape: "jag" },
+  { x: 92, y: 78, size: 1.7, rot: -60, opacity: 0.3, shape: "jag" },
+  { x: 55, y: 82, size: 2.8, rot: 22, opacity: 0.45, shape: "jag" },
+  { x: 32, y: 88, size: 3.4, rot: -12, opacity: 0.6, shape: "panel" },
+  { x: 78, y: 8, size: 1.5, rot: 70, opacity: 0.25, shape: "jag" },
+  { x: 15, y: 32, size: 1.4, rot: 100, opacity: 0.25, shape: "jag" },
+];
+---
+
+<div class="debris-field" aria-hidden="true">
+  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+    <path
+      class="debris-arc"
+      d="M-10 30 Q50 5 110 30"
+      fill="none"
+    />
+    <path
+      class="debris-arc"
+      d="M-10 75 Q50 95 110 75"
+      fill="none"
+    />
+    {
+      fragments.map((f) => (
+        <g transform={`translate(${f.x} ${f.y}) rotate(${f.rot}) scale(${f.size})`} opacity={f.opacity}>
+          <polygon points={f.shape === "panel" ? panelPoints : jaggedPoints} />
+        </g>
+      ))
+    }
+  </svg>
+</div>

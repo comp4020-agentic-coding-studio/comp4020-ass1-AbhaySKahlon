@@ -1,0 +1,26 @@
+---
+// The moment the sky becomes space: Earth's curved limb low in the frame,
+// a thin glowing atmospheric rim, and a haze that thins to black above it.
+// Paired with KarmanBanner (real text) rendered separately in
+// JourneySection.astro — this is the aria-hidden visual half of the same
+// moment, not a second place the "100km" fact is stated.
+---
+
+<div class="karman-horizon" aria-hidden="true">
+  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="karman-haze" x1="0" y1="1" x2="0" y2="0">
+        <stop offset="0%" stop-color="#bfe4ff" stop-opacity="0.5" />
+        <stop offset="30%" stop-color="#6fb6e0" stop-opacity="0.16" />
+        <stop offset="100%" stop-color="#6fb6e0" stop-opacity="0" />
+      </linearGradient>
+      <linearGradient id="karman-limb" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#123a5e" />
+        <stop offset="100%" stop-color="#020409" />
+      </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="100" height="92" fill="url(#karman-haze)" />
+    <path d="M0 100 L0 92 Q50 78 100 92 L100 100 Z" fill="url(#karman-limb)" />
+    <path d="M0 92 Q50 78 100 92" fill="none" stroke="#eaf6ff" stroke-width="0.6" opacity="0.85" />
+  </svg>
+</div>
