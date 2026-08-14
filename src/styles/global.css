@@ -590,6 +590,11 @@ main#journey {
   mix-blend-mode: multiply;
 }
 
+.moon-highland {
+  fill: #f2f0ea;
+  mix-blend-mode: soft-light;
+}
+
 .moon-crater {
   mix-blend-mode: multiply;
 }
