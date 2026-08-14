@@ -2,10 +2,15 @@
 // custom wheel handling. The browser stays in charge of scrolling (mouse,
 // trackpad, touch, Page Up/Down, spacebar, arrow keys all keep working);
 // this only reads where the viewport ended up and reports it.
+//
+// The journey is an ascent: the page renders the Moon at the top and Earth
+// at the bottom (see index.astro), so this local `milestones` array is kept
+// in that same reversed (descending-distance) order to match `.stop`
+// elements in DOM order — index i here is section i on the page.
 import milestonesData from "../data/milestones.json";
 import { formatDistanceKm, getActiveMilestone, sortedMilestones, type Milestone } from "../lib/journey";
 
-const milestones = sortedMilestones(milestonesData as Milestone[]);
+const milestones = sortedMilestones(milestonesData as Milestone[]).reverse();
 const sections = Array.from(document.querySelectorAll<HTMLElement>(".stop"));
 
 const distanceValue = document.getElementById("hud-distance-value");

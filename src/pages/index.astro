@@ -18,6 +18,16 @@ const boundaries = [
   1,
 ];
 const encountersFor = encountersByMilestone as Record<string, { kind: string; label: string }[]>;
+
+// The journey is an ascent, not a descent: Earth renders at the BOTTOM of the
+// page and the Moon at the TOP, so scrolling up is travelling further from
+// Earth. `milestones`/`heights`/`boundaries` above stay in ascending-distance
+// order — that's still the source of truth the maths reads from — this
+// reversed copy only controls the order sections stack on the page. Each
+// section keeps its own height; only the stacking direction flips, so
+// skyTop/skyBottom swap relative to the ascending index to keep the sky-to-
+// space gradient continuous across the now-reversed stack.
+const displayMilestones = [...milestones].reverse();
 ---
 
 <Layout title="Deep Space: Earth to Moon">
@@ -29,16 +39,19 @@ const encountersFor = encountersByMilestone as Record<string, { kind: string; la
   <Hud />
   <main id="journey">
     {
-      milestones.map((milestone, index) => (
-        <JourneySection
-          milestone={milestone}
-          encounters={encountersFor[milestone.id] ?? []}
-          heightVh={heights[index]}
-          skyTop={colorAt(boundaries[index])}
-          skyBottom={colorAt(boundaries[index + 1])}
-          isFirst={index === 0}
-        />
-      ))
+      displayMilestones.map((milestone, displayIndex) => {
+        const index = milestones.length - 1 - displayIndex;
+        return (
+          <JourneySection
+            milestone={milestone}
+            encounters={encountersFor[milestone.id] ?? []}
+            heightVh={heights[index]}
+            skyTop={colorAt(boundaries[index + 1])}
+            skyBottom={colorAt(boundaries[index])}
+            isFirst={milestone.id === "earth"}
+          />
+        );
+      })
     }
   </main>
   <script src="../scripts/journey-client.ts"></script>
