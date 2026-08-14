@@ -54,5 +54,17 @@ const displayMilestones = [...milestones].reverse();
       })
     }
   </main>
+  <script is:inline>
+    // The journey starts at Earth even though it's the last section in the
+    // page (Moon renders at the top — see the reversed order above). This
+    // sets the initial view via the browser's own fragment-navigation, the
+    // same native mechanism an <a href="#earth"> link would use — not
+    // scrollTo/scrollIntoView, and not a listener that could later intercept
+    // scrolling. Guarded so an explicit deep link (e.g. #moon) is respected
+    // instead of overridden.
+    if (!location.hash) {
+      location.replace(location.pathname + location.search + "#earth");
+    }
+  </script>
   <script src="../scripts/journey-client.ts"></script>
 </Layout>
