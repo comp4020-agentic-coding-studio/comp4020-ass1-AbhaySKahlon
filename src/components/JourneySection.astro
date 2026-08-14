@@ -2,6 +2,7 @@
 import type { Milestone } from "../lib/journey";
 import EncounterField from "./EncounterField.astro";
 import AnimalAstronauts from "./scenes/AnimalAstronauts.astro";
+import AtmosphereLayer from "./scenes/AtmosphereLayer.astro";
 import DebrisField from "./scenes/DebrisField.astro";
 import DeepSpaceField from "./scenes/DeepSpaceField.astro";
 import EarthHorizon from "./scenes/EarthHorizon.astro";
@@ -46,6 +47,9 @@ const encounterBand =
 >
   <div class="stop-scene" aria-hidden="true">
     {milestone.id === "earth" && <EarthHorizon />}
+    {milestone.id === "troposphere" && <AtmosphereLayer stage="troposphere" />}
+    {milestone.id === "stratosphere" && <AtmosphereLayer stage="stratosphere" />}
+    {milestone.id === "mesosphere" && <AtmosphereLayer stage="mesosphere" />}
     {milestone.id === "karman-line" && <KarmanHorizon />}
     {milestone.id === "low-earth-orbit" && <OrbitHorizon />}
     {milestone.id === "iss" && <IssStructure />}

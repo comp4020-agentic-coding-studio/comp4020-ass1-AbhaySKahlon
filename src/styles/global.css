@@ -267,39 +267,71 @@ main#journey {
   height: 100%;
 }
 
-.earth-clouds span {
+.earth-limb-rim {
+  stroke: #eaf6ff;
+  stroke-width: 0.6;
+  opacity: 0.6;
+}
+
+.earth-cloud path {
+  fill: #fbfdff;
+}
+
+.earth-cloud-far {
+  filter: blur(1.2px);
+}
+
+/* ---- atmosphere ascent (troposphere / stratosphere / mesosphere) ----
+   One shared limb-and-cloud scene (AtmosphereLayer.astro), parameterised
+   per stage, so the climb reads as continuous recession rather than three
+   unrelated backgrounds; see the component for the per-stage geometry. */
+
+.atmosphere-layer {
   position: absolute;
-  border-radius: 50%;
-  background: rgb(255 255 255 / 50%);
-  filter: blur(6px);
+  inset: 0;
 }
 
-.earth-clouds span:nth-child(1) {
-  left: 10%;
-  top: 22%;
-  width: 22%;
-  height: 6%;
+.atmosphere-layer svg {
+  width: 100%;
+  height: 100%;
 }
 
-.earth-clouds span:nth-child(2) {
-  left: 55%;
-  top: 32%;
-  width: 28%;
-  height: 7%;
+.atmo-rim {
+  stroke: #eaf6ff;
 }
 
-.earth-clouds span:nth-child(3) {
-  left: 30%;
-  top: 46%;
-  width: 18%;
-  height: 5%;
+.atmo-rim-glow {
+  stroke: #eaf6ff;
+  stroke-width: 3;
+  opacity: 0.25;
+  filter: blur(2.5px);
 }
 
-.earth-clouds span:nth-child(4) {
-  left: 68%;
-  top: 15%;
-  width: 16%;
-  height: 5%;
+.atmo-cloud path {
+  fill: #fbfdff;
+}
+
+.atmo-cloud-far {
+  filter: blur(1.4px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .earth-clouds,
+  .atmosphere-layer-troposphere .atmo-clouds,
+  .atmosphere-layer-stratosphere .atmo-clouds {
+    animation: cloud-drift 70s ease-in-out infinite;
+  }
+}
+
+@keyframes cloud-drift {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(1.5px);
+  }
 }
 
 /* ---- Kármán line ---- */
@@ -1047,6 +1079,8 @@ main#journey {
   .wind-line,
   .dog-astronaut-drift,
   .astro-mote,
+  .earth-clouds,
+  .atmo-clouds,
   .stop[data-phase="deep-space"]::after,
   .stop[data-phase="moon"]::after {
     animation: none;
