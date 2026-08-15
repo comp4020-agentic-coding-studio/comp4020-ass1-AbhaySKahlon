@@ -1,26 +1,12 @@
 ---
-// A schematic, blueprint-style ISS — main truss, module cluster, and four
-// solar array wings with cell grid lines — sized to read as an identifiable
-// structure rather than the small station icon used in the encounter field.
-const panelXs = [20, 36, 104, 120];
-const gridYs = [14, 22, 30, 38, 46];
+// The real International Space Station, photographed from the SpaceX Crew
+// Dragon Endeavour during its Nov. 8, 2021 fly-around after undocking
+// (NASA/ESA, Thomas Pesquet — mosaic jsc2021e064215_alt, public domain).
+// Imported as a project asset so Vite emits it under the configured base
+// path instead of a hand-written absolute URL.
+import issFlyaround from "../../assets/scenes/iss-flyaround.jpg";
 ---
 
 <div class="iss-structure" aria-hidden="true">
-  <svg viewBox="0 0 160 60" preserveAspectRatio="xMidYMid meet">
-    {
-      panelXs.map((x) => (
-        <g class="iss-array">
-          <rect x={x} y="6" width="14" height="48" />
-          {gridYs.map((y) => (
-            <line x1={x} y1={y} x2={x + 14} y2={y} />
-          ))}
-        </g>
-      ))
-    }
-    <rect x="15" y="29" width="130" height="2" class="iss-truss" />
-    <rect x="100" y="23" width="11" height="14" class="iss-radiator" />
-    <rect x="64" y="22" width="32" height="16" rx="4" class="iss-module" />
-    <rect x="73" y="11" width="14" height="11" rx="2" class="iss-module" />
-  </svg>
+  <img class="iss-photo" src={issFlyaround.src} alt="" />
 </div>

@@ -378,40 +378,21 @@ main#journey {
   position: absolute;
   inset: 0;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  padding-bottom: 6vh;
+  padding-bottom: 4vh;
 }
 
-.iss-structure svg {
-  width: min(98vmin, 64rem);
+.iss-photo {
+  width: min(96vmin, 68rem);
   height: auto;
-}
 
-.iss-array rect {
-  fill: #3f6fa8;
-  opacity: 0.9;
-}
-
-.iss-array line {
-  stroke: #c7d3e0;
-  stroke-width: 0.4;
-  opacity: 0.6;
-}
-
-.iss-truss {
-  fill: #c7d3e0;
-}
-
-.iss-radiator {
-  fill: none;
-  stroke: #eef3fb;
-  stroke-width: 0.4;
-  opacity: 0.7;
-}
-
-.iss-module {
-  fill: #dfe6ee;
+  /* The source photo sits on a pure black background; screen-blending it
+     against the already near-black space sky at this point in the journey
+     (see palette.ts) removes the black rectangle without masking or
+     recolouring the station itself. */
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 5vmin rgb(180 210 255 / 12%));
 }
 
 /* ---- animal astronauts ---- */
@@ -1049,11 +1030,11 @@ main#journey {
   }
 
   .iss-structure {
-    padding-bottom: 4vh;
+    padding-bottom: 2vh;
   }
 
-  .iss-structure svg {
-    width: min(92vmin, 26rem);
+  .iss-photo {
+    width: min(94vmin, 26rem);
   }
 
   .animal-astronauts-scene {
