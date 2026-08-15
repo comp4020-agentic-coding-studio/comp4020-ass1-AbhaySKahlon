@@ -108,8 +108,7 @@ main#journey {
   align-items: center;
   justify-content: center;
   padding: 2rem 1.5rem;
-  background: linear-gradient(to bottom, var(--sky-top), var(--sky-bottom));
-  transition: background-color 0.6s ease;
+  background: var(--sky-gradient);
   overflow: hidden;
 }
 
@@ -490,8 +489,42 @@ main#journey {
   height: 100%;
 }
 
-.debris-field polygon {
+.debris-jag {
   fill: #b7c4d6;
+}
+
+.debris-panel {
+  fill: url("#debris-metal-shade");
+  stroke: #eef3fb;
+  stroke-width: 0.03;
+  stroke-opacity: 0.4;
+}
+
+.debris-solar-base {
+  fill: url("#debris-solar-shade");
+  stroke: #4a5f7d;
+  stroke-width: 0.03;
+  stroke-opacity: 0.5;
+}
+
+.debris-solar-grid {
+  stroke: #6c86a8;
+  stroke-width: 0.045;
+  stroke-opacity: 0.6;
+}
+
+.debris-strut {
+  fill: url("#debris-metal-shade");
+}
+
+.debris-strut-highlight {
+  stroke: #e7edf5;
+  stroke-width: 0.05;
+  stroke-opacity: 0.35;
+}
+
+.debris-insulation {
+  fill: #8a7f66;
 }
 
 .debris-arc {

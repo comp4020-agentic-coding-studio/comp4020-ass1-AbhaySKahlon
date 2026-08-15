@@ -1,26 +1,37 @@
 ---
-// A field of orbital clutter, not a diagram: many small irregular fragments
-// at deliberately varied size/opacity (larger + brighter reads as "closer")
-// plus two faint dashed arcs for orbital context. Coordinates are hand-placed
-// and fixed, not Math.random, so the layout never shifts between builds.
+// A field of orbital clutter, not a diagram: the same 16 hand-placed,
+// deterministic fragments as before (not Math.random, so the layout never
+// shifts between builds), now drawn as a small vocabulary of recognisable
+// debris forms — a broken solar-panel section (with faint cell-grid lines),
+// a torn metallic panel, a structural strut, a composite/insulation chunk,
+// and small irregular fragments for the distant/faint tier — instead of
+// identical flat-filled polygons. Size and opacity still carry depth: bigger
+// and brighter reads as closer, smaller and fainter as further away. Two
+// faint dashed arcs remain for orbital context.
 const jaggedPoints = "-1,-0.6 0.8,-1 1,0.4 0.3,1 -0.9,0.6";
 const panelPoints = "-1,-0.5 1,-0.6 0.9,0.5 -0.8,0.6";
+const solarPoints = "-1,-0.8 0.6,-0.85 1,-0.3 0.9,0.8 -0.5,0.85 -1,0.3";
+const strutPath = "M -1 -0.28 Q -1.12 0 -1 0.28 L 0.7 0.34 Q 1.12 0 0.7 -0.34 Z";
+const insulationPath =
+  "M -0.9 -0.4 C -1.05 0 -0.7 0.5 -0.3 0.55 C 0.1 0.6 0.5 0.35 0.7 -0.05 C 0.9 -0.4 0.6 -0.85 0.15 -0.9 C -0.35 -0.95 -0.75 -0.75 -0.9 -0.4 Z";
 
-const fragments = [
-  { x: 8, y: 16, size: 8.5, rot: 12, opacity: 0.92, shape: "panel" },
-  { x: 26, y: 42, size: 3.2, rot: 50, opacity: 0.45, shape: "jag" },
-  { x: 16, y: 68, size: 5, rot: -20, opacity: 0.6, shape: "jag" },
+type FragmentShape = "solar" | "panel" | "strut" | "insulation" | "jag";
+
+const fragments: { x: number; y: number; size: number; rot: number; opacity: number; shape: FragmentShape }[] = [
+  { x: 8, y: 16, size: 8.5, rot: 12, opacity: 0.92, shape: "solar" },
+  { x: 26, y: 42, size: 3.2, rot: 50, opacity: 0.45, shape: "strut" },
+  { x: 16, y: 68, size: 5, rot: -20, opacity: 0.6, shape: "insulation" },
   { x: 38, y: 22, size: 2.4, rot: 80, opacity: 0.32, shape: "jag" },
   { x: 46, y: 55, size: 6.4, rot: 30, opacity: 0.78, shape: "panel" },
-  { x: 60, y: 12, size: 3, rot: -45, opacity: 0.38, shape: "jag" },
-  { x: 66, y: 36, size: 8, rot: 8, opacity: 0.95, shape: "panel" },
+  { x: 60, y: 12, size: 3, rot: -45, opacity: 0.38, shape: "strut" },
+  { x: 66, y: 36, size: 8, rot: 8, opacity: 0.95, shape: "solar" },
   { x: 74, y: 70, size: 2.6, rot: 60, opacity: 0.32, shape: "jag" },
-  { x: 82, y: 20, size: 4, rot: -30, opacity: 0.55, shape: "jag" },
+  { x: 82, y: 20, size: 4, rot: -30, opacity: 0.55, shape: "insulation" },
   { x: 88, y: 46, size: 5.6, rot: 15, opacity: 0.72, shape: "panel" },
-  { x: 4, y: 84, size: 3.4, rot: 40, opacity: 0.42, shape: "jag" },
+  { x: 4, y: 84, size: 3.4, rot: 40, opacity: 0.42, shape: "strut" },
   { x: 94, y: 78, size: 2.4, rot: -60, opacity: 0.3, shape: "jag" },
-  { x: 54, y: 84, size: 4.2, rot: 22, opacity: 0.5, shape: "jag" },
-  { x: 30, y: 90, size: 5.8, rot: -12, opacity: 0.68, shape: "panel" },
+  { x: 54, y: 84, size: 4.2, rot: 22, opacity: 0.5, shape: "insulation" },
+  { x: 30, y: 90, size: 5.8, rot: -12, opacity: 0.68, shape: "solar" },
   { x: 78, y: 6, size: 2.2, rot: 70, opacity: 0.26, shape: "jag" },
   { x: 13, y: 30, size: 2, rot: 100, opacity: 0.28, shape: "jag" },
 ];
@@ -28,20 +39,40 @@ const fragments = [
 
 <div class="debris-field" aria-hidden="true">
   <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path
-      class="debris-arc"
-      d="M-10 30 Q50 5 110 30"
-      fill="none"
-    />
-    <path
-      class="debris-arc"
-      d="M-10 75 Q50 95 110 75"
-      fill="none"
-    />
+    <defs>
+      <linearGradient id="debris-metal-shade" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#dbe3ec" />
+        <stop offset="55%" stop-color="#8f9bab" />
+        <stop offset="100%" stop-color="#454d59" />
+      </linearGradient>
+      <linearGradient id="debris-solar-shade" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#3a4d69" />
+        <stop offset="100%" stop-color="#141b29" />
+      </linearGradient>
+    </defs>
+    <path class="debris-arc" d="M-10 30 Q50 5 110 30" fill="none" />
+    <path class="debris-arc" d="M-10 75 Q50 95 110 75" fill="none" />
     {
       fragments.map((f) => (
         <g transform={`translate(${f.x} ${f.y}) rotate(${f.rot}) scale(${f.size})`} opacity={f.opacity}>
-          <polygon points={f.shape === "panel" ? panelPoints : jaggedPoints} />
+          {f.shape === "solar" && (
+            <>
+              <polygon class="debris-solar-base" points={solarPoints} />
+              <line class="debris-solar-grid" x1="-0.55" y1="-0.75" x2="-0.6" y2="0.8" />
+              <line class="debris-solar-grid" x1="0.05" y1="-0.85" x2="0" y2="0.85" />
+              <line class="debris-solar-grid" x1="0.65" y1="-0.6" x2="0.6" y2="0.8" />
+              <line class="debris-solar-grid" x1="-0.95" y1="0.05" x2="0.9" y2="0.1" />
+            </>
+          )}
+          {f.shape === "panel" && <polygon class="debris-panel" points={panelPoints} />}
+          {f.shape === "strut" && (
+            <>
+              <path class="debris-strut" d={strutPath} />
+              <line class="debris-strut-highlight" x1="-0.85" y1="0" x2="0.55" y2="0" />
+            </>
+          )}
+          {f.shape === "insulation" && <path class="debris-insulation" d={insulationPath} />}
+          {f.shape === "jag" && <polygon class="debris-jag" points={jaggedPoints} />}
         </g>
       ))
     }

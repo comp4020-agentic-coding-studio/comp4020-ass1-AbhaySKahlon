@@ -24,12 +24,11 @@ export interface Props {
   milestone: Milestone;
   encounters: Encounter[];
   heightVh: number;
-  skyTop: string;
-  skyBottom: string;
+  skyGradient: string;
   isFirst: boolean;
 }
 
-const { milestone, encounters, heightVh, skyTop, skyBottom, isFirst } = Astro.props;
+const { milestone, encounters, heightVh, skyGradient, isFirst } = Astro.props;
 const phaseSlug = milestone.phase.toLowerCase().replace(/\s+/g, "-");
 
 // The Moon's own encounters (footprints, hardware) belong on the ground
@@ -43,7 +42,7 @@ const encounterBand =
   class="stop"
   data-phase={phaseSlug}
   data-distance-km={milestone.distanceKm}
-  style={`min-height:${heightVh}vh;--sky-top:${skyTop};--sky-bottom:${skyBottom}`}
+  style={`min-height:${heightVh}vh;--sky-gradient:${skyGradient}`}
 >
   <div class="stop-scene" aria-hidden="true">
     {milestone.id === "earth" && <EarthHorizon />}

@@ -17,6 +17,29 @@ const boundaries = [
   ...milestones.map((milestone) => toVisualPosition(milestone.distanceKm)),
   1,
 ];
+
+// A single top/bottom colour per section flattens whatever the palette curve
+// actually does across that section's span into one straight line. Wherever a
+// section's own span crosses one of palette.ts's keyframes, that straight
+// line's slope diverges from the curve's real slope right at the point where
+// it meets the next section — and that mismatch in rate of change is what
+// reads as a hard seam, even though the colours themselves already match
+// exactly at the boundary. Sampling several points across the same span and
+// feeding them all into one gradient keeps each section's background tracking
+// the true curve, so its slope at both edges matches what the neighbouring
+// section draws at that same shared point.
+const SKY_GRADIENT_STOPS = 8;
+
+function skyGradient(index: number): string {
+  const top = boundaries[index + 1];
+  const bottom = boundaries[index];
+  const stops = Array.from({ length: SKY_GRADIENT_STOPS }, (_, i) => {
+    const t = i / (SKY_GRADIENT_STOPS - 1);
+    return colorAt(top + (bottom - top) * t);
+  });
+  return `linear-gradient(to bottom, ${stops.join(", ")})`;
+}
+
 const encountersFor = encountersByMilestone as Record<string, { kind: string; label: string }[]>;
 
 // The journey is an ascent, not a descent: Earth renders at the BOTTOM of the
@@ -25,8 +48,9 @@ const encountersFor = encountersByMilestone as Record<string, { kind: string; la
 // order — that's still the source of truth the maths reads from — this
 // reversed copy only controls the order sections stack on the page. Each
 // section keeps its own height; only the stacking direction flips, so
-// skyTop/skyBottom swap relative to the ascending index to keep the sky-to-
-// space gradient continuous across the now-reversed stack.
+// skyGradient(index) reads its top/bottom from the ascending boundaries
+// regardless of display order, keeping the sky-to-space gradient continuous
+// across the now-reversed stack.
 const displayMilestones = [...milestones].reverse();
 ---
 
@@ -46,8 +70,7 @@ const displayMilestones = [...milestones].reverse();
             milestone={milestone}
             encounters={encountersFor[milestone.id] ?? []}
             heightVh={heights[index]}
-            skyTop={colorAt(boundaries[index + 1])}
-            skyBottom={colorAt(boundaries[index])}
+            skyGradient={skyGradient(index)}
             isFirst={milestone.id === "earth"}
           />
         );
