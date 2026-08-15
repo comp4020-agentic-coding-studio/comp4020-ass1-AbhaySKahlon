@@ -255,30 +255,31 @@ main#journey {
   }
 }
 
-/* ---- Earth ---- */
+/* ---- Earth ----
+   The real Blue Marble photograph, clipped to a circle so it reads as a
+   planetary disc rather than a rectangular photo. Positioned low and large
+   so it dominates the lower part of the frame without being cropped by the
+   section's own edge. */
 
 .earth-horizon {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  bottom: 4%;
+  width: min(88vmin, 44rem);
+  transform: translateX(-50%);
+  filter: drop-shadow(0 0 4rem rgb(140 190 255 / 14%));
 }
 
 .earth-horizon svg {
   width: 100%;
   height: 100%;
+  display: block;
 }
 
-.earth-limb-rim {
+.earth-rim {
   stroke: #eaf6ff;
-  stroke-width: 0.6;
-  opacity: 0.6;
-}
-
-.earth-cloud path {
-  fill: #fbfdff;
-}
-
-.earth-cloud-far {
-  filter: blur(1.2px);
+  stroke-width: 0.5;
+  opacity: 0.5;
 }
 
 /* ---- atmosphere ascent (troposphere / stratosphere / mesosphere) ----
@@ -316,7 +317,6 @@ main#journey {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .earth-clouds,
   .atmosphere-layer-troposphere .atmo-clouds,
   .atmosphere-layer-stratosphere .atmo-clouds {
     animation: cloud-drift 70s ease-in-out infinite;
@@ -401,13 +401,11 @@ main#journey {
   mask-repeat: no-repeat;
 }
 
-/* ---- animal astronauts ---- */
-
-/* A dog tumbling in a spacesuit: helmet + floppy ears + snout carry the
-   "animal" read reliably; body, legs, tail, backpack and tether carry the
-   "astronaut in zero-g" read. Two small fruit flies sit further back and
-   fainter for depth (the fruit-fly encounter), and a scatter of motes give
-   a sense of weightlessness without any of it moving fast or far. */
+/* ---- animal astronauts ----
+   A real photograph (Ham the chimpanzee, post-flight) stands in for the
+   illustrated dog. Two small fruit flies and a scatter of motes are kept
+   from the previous version for depth (the fruit-fly encounter is the
+   actual first animals in space). */
 
 .animal-astronauts-scene {
   position: absolute;
@@ -418,15 +416,30 @@ main#journey {
   padding: 4vh 3vw;
 }
 
-.animal-astronauts-scene svg {
+.animal-astronaut-photo {
   position: relative;
   z-index: 1;
-  width: min(92vmin, 50rem);
+  width: min(78vmin, 40rem);
   height: auto;
+  filter: drop-shadow(0 0 4vmin rgb(180 210 255 / 12%));
+
+  /* Same alpha-mask technique as the ISS photo: fades the photo's own
+     rectangular frame into the surrounding starfield instead of leaving a
+     hard edge. */
+  mask-image: radial-gradient(ellipse 58% 56% at 50% 46%, black 55%, transparent 100%);
+  mask-repeat: no-repeat;
+}
+
+.animal-astronauts-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
   overflow: visible;
 }
 
-/* A soft, blurred glow behind the dog (same technique as .deep-space-glow)
+/* A soft, blurred glow behind the photo (same technique as .deep-space-glow)
    so the scene sits *in* the surrounding space rather than floating as a flat
    cutout on top of it. */
 .animal-astronaut-glow {
@@ -438,95 +451,6 @@ main#journey {
   border-radius: 50%;
   background: radial-gradient(circle, rgb(159 196 235 / 16%), transparent 70%);
   filter: blur(2.5rem);
-}
-
-.dog-tail,
-.dog-body,
-.dog-leg {
-  fill: url("#dog-fur-shade");
-}
-
-.dog-leg-back {
-  fill: url("#dog-fur-shade-recede");
-}
-
-.dog-paw {
-  fill: url("#dog-pack-shade");
-}
-
-.dog-paw-back {
-  fill: #8892a0;
-}
-
-.dog-pack {
-  fill: url("#dog-pack-shade");
-}
-
-.dog-antenna {
-  stroke: #eef3fb;
-  stroke-width: 0.8;
-  opacity: 0.8;
-}
-
-.dog-antenna-tip {
-  fill: #eef3fb;
-  opacity: 0.8;
-}
-
-.dog-collar {
-  fill: url("#dog-pack-shade");
-}
-
-.dog-ear {
-  fill: url("#dog-ear-shade");
-}
-
-.dog-ear-back {
-  fill: url("#dog-ear-shade");
-  opacity: 0.85;
-}
-
-.dog-helmet {
-  fill: url("#dog-helmet-shade");
-}
-
-.dog-snout {
-  fill: url("#dog-ear-shade");
-}
-
-.dog-nose {
-  fill: #180f08;
-}
-
-.dog-body,
-.dog-helmet {
-  stroke: #bcd8f2;
-  stroke-width: 0.4;
-  stroke-opacity: 0.35;
-}
-
-.dog-visor {
-  fill: url("#dog-visor-shade");
-  stroke: #eef3fb;
-  stroke-width: 0.6;
-  opacity: 0.9;
-}
-
-.dog-visor-highlight {
-  stroke: #f4faff;
-  stroke-width: 1;
-  opacity: 0.7;
-}
-
-.dog-tether {
-  stroke: #c7d3e0;
-  stroke-width: 0.8;
-  opacity: 0.55;
-}
-
-.dog-tether-clip {
-  fill: #c7d3e0;
-  opacity: 0.8;
 }
 
 .fruit-fly .fly-body,
@@ -549,24 +473,8 @@ main#journey {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .dog-astronaut-drift {
-    animation: dog-tumble 9s ease-in-out infinite;
-    transform-origin: -10px 0;
-  }
-
   .astro-mote {
     animation: star-twinkle 6s ease-in-out infinite;
-  }
-}
-
-@keyframes dog-tumble {
-  0%,
-  100% {
-    transform: rotate(-2deg) translateY(0);
-  }
-
-  50% {
-    transform: rotate(2deg) translateY(-1.5px);
   }
 }
 
@@ -1049,8 +957,8 @@ main#journey {
     padding-bottom: 6vh;
   }
 
-  .animal-astronauts-scene svg {
-    width: min(88vmin, 22rem);
+  .animal-astronaut-photo {
+    width: min(80vmin, 20rem);
   }
 }
 
@@ -1066,9 +974,7 @@ main#journey {
   .encounter-icon[data-kind="dust"],
   .va-particles circle,
   .wind-line,
-  .dog-astronaut-drift,
   .astro-mote,
-  .earth-clouds,
   .atmo-clouds,
   .stop[data-phase="deep-space"]::after,
   .stop[data-phase="moon"]::after {

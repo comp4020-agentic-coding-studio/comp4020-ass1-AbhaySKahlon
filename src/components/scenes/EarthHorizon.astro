@@ -1,56 +1,30 @@
 ---
-// The journey's starting environment: a large, closely-viewed planetary
-// horizon — the viewer looking down at Earth from height, not standing on
-// flat ground — so the scale of the whole journey reads immediately.
-// Clouds are irregular blob silhouettes (the same translate/scale-instance
-// technique used for the Moon's craters/maria in MoonDisc.astro), layered
-// near/far for depth, rather than the four blurred circles this used to be.
-type CloudShape = "puff" | "wisp";
-
-const cloudBlobs: Record<CloudShape, string> = {
-  puff: "M -1.1 0.1 C -1.2 -0.35 -0.7 -0.55 -0.3 -0.4 C -0.05 -0.6 0.35 -0.55 0.5 -0.3 C 0.85 -0.4 1.15 -0.15 1.05 0.15 C 0.9 0.4 0.5 0.5 0.15 0.42 C -0.3 0.55 -0.9 0.45 -1.1 0.1 Z",
-  wisp: "M -1 0 C -1 -0.16 -0.6 -0.22 -0.2 -0.15 C 0.2 -0.22 0.7 -0.12 1 0 C 0.7 0.16 0.2 0.2 -0.2 0.15 C -0.6 0.2 -1 0.12 -1 0 Z",
-};
-
-const clouds: { x: number; y: number; sx: number; sy: number; opacity: number; shape: CloudShape; layer: "near" | "far" }[] = [
-  { x: 10, y: 38, sx: 24, sy: 10, opacity: 0.92, shape: "puff", layer: "near" },
-  { x: 46, y: 30, sx: 32, sy: 13, opacity: 0.95, shape: "puff", layer: "near" },
-  { x: 84, y: 40, sx: 22, sy: 9, opacity: 0.82, shape: "puff", layer: "near" },
-  { x: 66, y: 20, sx: 20, sy: 7, opacity: 0.55, shape: "wisp", layer: "far" },
-  { x: 26, y: 48, sx: 18, sy: 7, opacity: 0.5, shape: "puff", layer: "far" },
-  { x: 0, y: 24, sx: 14, sy: 6, opacity: 0.45, shape: "wisp", layer: "far" },
-];
+// The journey's starting environment: the real Earth, photographed from
+// Apollo 17 during the translunar coast (AS17-148-22727, "Blue Marble",
+// Dec. 7, 1972 — NASA, public domain), shown as a large circular planetary
+// disc dominating the lower part of the frame. A clipPath keeps the photo
+// itself the sole source of continents/cloud/ocean detail — no hand-drawn
+// SVG geography on top — and a thin rim + soft outer glow read as
+// atmosphere without turning the photo into an illustration.
+import earthBlueMarble from "../../assets/scenes/earth-blue-marble.jpg";
 ---
 
 <div class="earth-horizon" aria-hidden="true">
-  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+  <svg viewBox="0 0 100 100">
     <defs>
-      <linearGradient id="earth-limb" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#dff2ff" stop-opacity="0.6" />
-        <stop offset="12%" stop-color="#3fa06f" stop-opacity="1" />
-        <stop offset="55%" stop-color="#1b6f4c" stop-opacity="1" />
-        <stop offset="100%" stop-color="#0d3350" stop-opacity="1" />
-      </linearGradient>
-      <radialGradient id="earth-glow" cx="50%" cy="0%" r="85%">
-        <stop offset="0%" stop-color="#bfe4ff" stop-opacity="0.45" />
-        <stop offset="100%" stop-color="#bfe4ff" stop-opacity="0" />
+      <clipPath id="earth-disc-clip">
+        <circle cx="50" cy="50" r="46" />
+      </clipPath>
+      <radialGradient id="earth-rim-glow" cx="50%" cy="50%" r="50%">
+        <stop offset="80%" stop-color="#bfe4ff" stop-opacity="0" />
+        <stop offset="95%" stop-color="#cfeaff" stop-opacity="0.5" />
+        <stop offset="100%" stop-color="#cfeaff" stop-opacity="0" />
       </radialGradient>
     </defs>
-    <rect x="0" y="0" width="100" height="100" fill="url(#earth-glow)" />
-    <path class="earth-limb" d="M0 100 L0 40 Q50 4 100 40 L100 100 Z" fill="url(#earth-limb)" />
-    <path class="earth-limb-rim" d="M0 40 Q50 4 100 40" fill="none" />
-    <g class="earth-clouds">
-      {
-        clouds.map((cloud) => (
-          <g
-            class={`earth-cloud earth-cloud-${cloud.layer}`}
-            transform={`translate(${cloud.x} ${cloud.y}) scale(${cloud.sx} ${cloud.sy})`}
-            opacity={cloud.opacity}
-          >
-            <path d={cloudBlobs[cloud.shape]} />
-          </g>
-        ))
-      }
+    <g clip-path="url(#earth-disc-clip)">
+      <image href={earthBlueMarble.src} x="4" y="4" width="92" height="92" preserveAspectRatio="xMidYMid slice" />
     </g>
+    <circle class="earth-rim" cx="50" cy="50" r="46" fill="none" />
+    <circle cx="50" cy="50" r="49" fill="url(#earth-rim-glow)" />
   </svg>
 </div>
