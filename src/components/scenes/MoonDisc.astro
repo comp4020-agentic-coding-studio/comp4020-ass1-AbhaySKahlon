@@ -1,106 +1,39 @@
 ---
-// The Moon rendered as a shaded, cratered, mottled disc rather than a flat
-// grey circle, at two sizes so it visibly grows between "moon-approach" and
-// "moon" instead of appearing at full size in one step. Realism comes from
-// layering (base tonal gradient -> irregular mare/highland patches ->
-// irregular gradient-shaded crater blobs -> a faint procedural surface
-// grain), all native SVG, no external image — the rest of the build stays a
-// single inlined dist/index.html with no separate asset pipeline to keep
-// working under the GitHub Pages base path.
-//
-// Craters are irregular hand-drawn blobs (four reusable outlines), not
-// circles — perfect circles are what read as "pimples" rather than actual
-// weathered lunar terrain. None of the blob instances below are rotated:
-// the shared crater gradient is bound to each blob's own (unrotated)
-// bounding box, so every crater keeps the same upper-left light direction as
-// the disc itself instead of looking lit from a different angle per crater.
+// The Moon rendered as a real NASA photograph rather than illustrated
+// craters/maria: Apollo 11's AS11-44-6665, "an outstanding view of the
+// entire nearside surface of the moon," photographed during the mission's
+// trans-Earth journey home on July 21, 1969 (NASA/JSC, public domain).
+// Two sizes so it visibly grows between "moon-approach" and "moon" instead
+// of appearing at full size in one step. A circular clipPath keeps the
+// photograph itself the sole source of surface detail — no SVG
+// craters/maria/noise layered on top — consistent with the photographic
+// treatment already used for Earth, the ISS and the animal astronauts.
+import moonApollo from "../../assets/scenes/moon-apollo.jpg";
+
 export interface Props {
   size: "approach" | "full";
 }
 
 const { size } = Astro.props;
-const gradientId = `moon-shade-${size}`;
-const craterShadeId = `moon-crater-shade-${size}`;
-const noiseFilterId = `moon-noise-${size}`;
 const clipId = `moon-clip-${size}`;
-
-type CraterShape = "a" | "b" | "c" | "d";
-
-const craterBlobs: Record<CraterShape, string> = {
-  a: "M -1 -0.1 C -0.9 -0.7 -0.3 -1 0.3 -0.85 C 0.9 -0.7 1.05 -0.15 0.85 0.4 C 0.65 0.9 0.05 1.05 -0.5 0.8 C -0.95 0.6 -1.05 0.3 -1 -0.1 Z",
-  b: "M -0.9 0.3 C -1.05 -0.2 -0.6 -0.75 0.05 -0.7 C 0.7 -0.65 1.1 -0.2 0.95 0.35 C 0.8 0.85 0.2 1 -0.35 0.85 C -0.75 0.75 -0.8 0.6 -0.9 0.3 Z",
-  c: "M -0.8 -0.3 C -0.6 -0.9 0.2 -0.95 0.6 -0.5 C 0.95 -0.15 0.85 0.5 0.4 0.8 C -0.1 1.05 -0.7 0.7 -0.85 0.2 C -0.9 0 -0.85 -0.15 -0.8 -0.3 Z",
-  d: "M -1 0 C -1 -0.55 -0.55 -1 0 -1 C 0.55 -1 1 -0.55 1 0 C 1 0.45 0.7 0.85 0.3 0.98 C -0.2 1.1 -0.8 0.7 -1 0 Z",
-};
-const rimArc = "M -0.75 -0.5 A 1 1 0 0 1 0.1 -0.98";
-
-const mares = [
-  "M30 32 C24 30 20 38 22 45 C24 52 32 56 40 54 C48 52 50 44 46 38 C43 33 36 33 30 32 Z",
-  "M60 55 C56 53 52 58 54 63 C56 68 63 70 68 66 C72 62 71 56 66 54 C64 53 62 54 60 55 Z",
-  "M18 72 C15 70 12 74 13 78 C14 82 19 84 23 82 C27 80 27 75 24 73 C22 71 20 71 18 72 Z",
-];
-
-const highlands: { x: number; y: number; scale: number; shape: CraterShape; opacity: number }[] = [
-  { x: 55, y: 33, scale: 13, shape: "a", opacity: 0.12 },
-  { x: 26, y: 64, scale: 9, shape: "d", opacity: 0.1 },
-];
-
-const craters: { x: number; y: number; scale: number; shape: CraterShape; opacity: number; rim?: boolean }[] = [
-  { x: 34, y: 38, scale: 6.5, shape: "d", opacity: 0.85, rim: true },
-  { x: 61, y: 30, scale: 3.6, shape: "b", opacity: 0.7 },
-  { x: 66, y: 58, scale: 8, shape: "a", opacity: 0.9, rim: true },
-  { x: 40, y: 67, scale: 4, shape: "c", opacity: 0.75 },
-  { x: 25, y: 58, scale: 2.6, shape: "b", opacity: 0.6 },
-  { x: 78, y: 44, scale: 2.2, shape: "c", opacity: 0.55 },
-  { x: 46, y: 24, scale: 1.9, shape: "a", opacity: 0.5 },
-  { x: 55, y: 45, scale: 1.4, shape: "c", opacity: 0.4 },
-  { x: 30, y: 20, scale: 1.6, shape: "b", opacity: 0.45 },
-  { x: 70, y: 72, scale: 2, shape: "d", opacity: 0.5 },
-];
+const glowId = `moon-glow-${size}`;
 ---
 
 <div class={`moon-disc moon-disc-${size}`} aria-hidden="true">
   <svg viewBox="0 0 100 100">
     <defs>
-      <radialGradient id={gradientId} cx="32%" cy="30%" r="75%">
-        <stop offset="0%" stop-color="#f4f4f2" />
-        <stop offset="35%" stop-color="#d9d9d6" />
-        <stop offset="60%" stop-color="#a8a8ac" />
-        <stop offset="82%" stop-color="#75757c" />
-        <stop offset="100%" stop-color="#45454b" />
-      </radialGradient>
-      <radialGradient id={craterShadeId} cx="32%" cy="28%" r="75%">
-        <stop offset="0%" stop-color="#f2f2f4" stop-opacity="0.35" />
-        <stop offset="45%" stop-color="#6c6c72" stop-opacity="0.22" />
-        <stop offset="100%" stop-color="#161619" stop-opacity="0.6" />
-      </radialGradient>
-      <filter id={noiseFilterId} x="-20%" y="-20%" width="140%" height="140%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" seed="7" result="grain" />
-        <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0" />
-      </filter>
       <clipPath id={clipId}>
         <circle cx="50" cy="50" r="46" />
       </clipPath>
+      <radialGradient id={glowId} cx="50%" cy="50%" r="50%">
+        <stop offset="80%" stop-color="#f4f4f2" stop-opacity="0" />
+        <stop offset="95%" stop-color="#f4f4f2" stop-opacity="0.3" />
+        <stop offset="100%" stop-color="#f4f4f2" stop-opacity="0" />
+      </radialGradient>
     </defs>
-    <circle cx="50" cy="50" r="46" fill={`url(#${gradientId})`} />
     <g clip-path={`url(#${clipId})`}>
-      {mares.map((d) => <path class="moon-mare" d={d} />)}
-      {
-        highlands.map((h) => (
-          <g transform={`translate(${h.x} ${h.y}) scale(${h.scale})`}>
-            <path class="moon-highland" d={craterBlobs[h.shape]} opacity={h.opacity} />
-          </g>
-        ))
-      }
-      {
-        craters.map((c) => (
-          <g transform={`translate(${c.x} ${c.y}) scale(${c.scale})`}>
-            <path class="moon-crater" d={craterBlobs[c.shape]} fill={`url(#${craterShadeId})`} opacity={c.opacity} />
-            {c.rim && <path class="moon-crater-rim" d={rimArc} />}
-          </g>
-        ))
-      }
-      <circle cx="50" cy="50" r="46" class="moon-texture" filter={`url(#${noiseFilterId})`} />
+      <image href={moonApollo.src} x="4" y="4" width="92" height="92" preserveAspectRatio="xMidYMid slice" />
     </g>
+    <circle cx="50" cy="50" r="49" fill={`url(#${glowId})`} />
   </svg>
 </div>

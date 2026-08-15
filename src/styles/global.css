@@ -680,34 +680,6 @@ main#journey {
   height: 100%;
 }
 
-.moon-mare {
-  fill: #3d4550;
-  opacity: 0.32;
-  mix-blend-mode: multiply;
-}
-
-.moon-highland {
-  fill: #f2f0ea;
-  mix-blend-mode: soft-light;
-}
-
-.moon-crater {
-  mix-blend-mode: multiply;
-}
-
-.moon-crater-rim {
-  fill: none;
-  stroke: #e8e8ea;
-  stroke-width: 0.35;
-  opacity: 0.35;
-}
-
-.moon-texture {
-  fill: #808080;
-  opacity: 0.14;
-  mix-blend-mode: overlay;
-}
-
 .lunar-surface {
   position: absolute;
   inset: auto 0 0;
