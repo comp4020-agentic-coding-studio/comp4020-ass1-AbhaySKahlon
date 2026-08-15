@@ -1,19 +1,28 @@
 ---
-// A restrained particle flow, not a decoration for its own sake: a handful
-// of faint streaks moving outward from the Sun's direction. Static (but
-// still visible as a composition) when prefers-reduced-motion is set.
+// A restrained particle flow, not a decoration for its own sake: a field of
+// faint streaks moving outward from the Sun's direction, mostly distant and
+// subtle with the occasional nearer, slightly stronger one so the flow reads
+// as having depth rather than being four identical isolated lines. Static
+// (but still visible as a composition) when prefers-reduced-motion is set.
 const lines = [
-  { top: 18, delay: 0 },
-  { top: 38, delay: 1.4 },
-  { top: 58, delay: 2.8 },
-  { top: 76, delay: 0.7 },
+  { top: 9, left: 4, width: 22, delay: 0, depth: "far" },
+  { top: 19, left: 10, width: 34, delay: 2.6, depth: "near" },
+  { top: 30, left: 2, width: 20, delay: 4.8, depth: "far" },
+  { top: 42, left: 14, width: 26, delay: 1.4, depth: "far" },
+  { top: 54, left: 6, width: 36, delay: 3.6, depth: "near" },
+  { top: 65, left: 12, width: 21, delay: 0.7, depth: "far" },
+  { top: 77, left: 3, width: 25, delay: 5.4, depth: "far" },
+  { top: 88, left: 16, width: 19, delay: 2.1, depth: "far" },
 ];
 ---
 
 <div class="solar-wind-field" aria-hidden="true">
   {
     lines.map((line) => (
-      <span class="wind-line" style={`top:${line.top}%;animation-delay:${line.delay}s`} />
+      <span
+        class={`wind-line wind-line-${line.depth}`}
+        style={`top:${line.top}%;left:${line.left}%;width:${line.width}%;animation-delay:${line.delay}s`}
+      />
     ))
   }
 </div>

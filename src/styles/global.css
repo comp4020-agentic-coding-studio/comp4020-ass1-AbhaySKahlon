@@ -596,6 +596,7 @@ main#journey {
   position: absolute;
   border-radius: 50%;
   filter: blur(3rem);
+  opacity: 0.85;
 }
 
 .deep-space-glow-a {
@@ -612,6 +613,56 @@ main#journey {
   right: -25%;
   bottom: -20%;
   background: radial-gradient(circle, rgb(191 228 255 / 16%), transparent 70%);
+}
+
+.deep-space-glow-c {
+  width: 60vmin;
+  height: 60vmin;
+  left: 42%;
+  top: 54%;
+  background: radial-gradient(circle, rgb(168 188 230 / 11%), transparent 72%);
+}
+
+.deep-space-glow-d {
+  width: 78vmin;
+  height: 78vmin;
+  left: 58%;
+  top: -18%;
+  background: radial-gradient(circle, rgb(150 178 205 / 13%), transparent 72%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .deep-space-glow {
+    animation: deep-space-drift 48s ease-in-out infinite;
+  }
+
+  .deep-space-glow-b {
+    animation-duration: 58s;
+    animation-delay: -20s;
+  }
+
+  .deep-space-glow-c {
+    animation-duration: 40s;
+    animation-delay: -8s;
+  }
+
+  .deep-space-glow-d {
+    animation-duration: 64s;
+    animation-delay: -34s;
+  }
+}
+
+@keyframes deep-space-drift {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
 }
 
 /* ---- Van Allen belts ---- */
@@ -704,15 +755,24 @@ main#journey {
 
 .wind-line {
   position: absolute;
-  left: 8%;
-  width: 30%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgb(255 214 166 / 70%), transparent);
+  background: linear-gradient(90deg, transparent, rgb(255 214 166 / 55%), transparent);
+  opacity: 0.38;
+}
+
+.wind-line-near {
+  height: 1.6px;
+  background: linear-gradient(90deg, transparent, rgb(255 224 186 / 80%), transparent);
+  opacity: 0.55;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .wind-line {
-    animation: wind-flow 7s ease-in-out infinite;
+    animation: wind-flow 9s ease-in-out infinite;
+  }
+
+  .wind-line-near {
+    animation: wind-flow-near 6s ease-in-out infinite;
   }
 }
 
@@ -720,12 +780,25 @@ main#journey {
   0%,
   100% {
     transform: translateX(0);
-    opacity: 0.5;
+    opacity: 0.38;
   }
 
   50% {
-    transform: translateX(3rem);
-    opacity: 0.9;
+    transform: translateX(2.2rem);
+    opacity: 0.68;
+  }
+}
+
+@keyframes wind-flow-near {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: translateX(3.4rem);
+    opacity: 0.88;
   }
 }
 
@@ -1137,6 +1210,7 @@ main#journey {
   .encounter-icon[data-kind="spacecraft"],
   .encounter-icon[data-kind="dust"],
   .va-particles circle,
+  .deep-space-glow,
   .wind-line,
   .astro-mote,
   .atmo-clouds,
