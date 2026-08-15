@@ -1,83 +1,73 @@
-# Process overview
+# Process
 
-<!-- TEMPLATE: this file is a shape to fill in, not a form. Replace everything
-     in it with your own overview, and delete this comment — `pnpm
-     check:evidence` will remind you if it's still here. -->
+Deep Space is a single continuous vertical-scroll journey from Earth's surface
+to the Moon. Position on the page maps to real distance on a log scale, driven
+entirely by `src/data/milestones.json`; there is no navigation, no separate
+"pages" — scrolling is the whole interaction. The five moments below are the
+ones that changed the shape of the prototype, not just its content.
 
-A reading-guide to how the work came together --- a map to your process, not an
-essay about it. Markers read this file and follow its citations; they don't
-trawl the repo for evidence you didn't point at, so if a moment mattered, cite
-it.
+## 1. Reducing the text-box dominance
 
-This file is the shape; the course site's
-[assessment page](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/topics/assessment/#what-you-submit)
-is the requirement, and each brief adds its own word count and moment count.
+The first working version had a large, opaque, rounded, blurred card sitting
+on top of every scene — a dashboard panel bolted onto a space journey. The
+obvious move was to keep styling that card (softer shadow, better colour).
+Instead we cut the card itself: dropped the opaque background, border-radius,
+box-shadow and backdrop-blur so the title sits directly on the scene with only
+a text-shadow, and only the denser body copy keeps a small translucent
+backing sized to its own content
+([`ed89d99`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-AbhaySKahlon/commit/ed89d99b5a594738ab07212ebd1dd4476f9250f9)).
+The scenes, not the UI chrome, became the primary visual, verified by scrolling
+the built page at both marking viewports.
 
-## What I built
+## 2. Choosing real photography over generated shapes
 
-One paragraph: the thing, and the idea behind it.
+Adding more gradients and geometry to the illustrated Earth, ISS and Moon
+scenes wasn't making them read as real. The strategy change was to stop adding
+artificial detail and swap in authentic NASA imagery instead: Earth and the Ham
+the chimpanzee "animal astronauts" scene
+([`1498490`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-AbhaySKahlon/commit/1498490aa10fd1453bda765e5f232fa7dcde0eab))
+and the Moon
+([`c52932c`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-AbhaySKahlon/commit/c52932c9994f0df69d0e4c81e22464bfe8c1997e)).
+Each swap is its own commit, not one bundled rewrite — the ISS photo is
+covered separately below.
 
-## The moments that mattered
+## 3. Removing the page-end seams
 
-Three or four for an assignment; fewer is fine for a weekly prototype. Keep the
-list short so each moment has room to do all four jobs:
+Visible horizontal cuts appeared between the atmospheric sections (Earth
+through Kármán and orbit). A background-gradient pass alone didn't fix it;
+Playwright inspection of the actual rendered pixels showed the SVG limb fills
+were fully opaque, so each section's box edge was a real boundary no matter how
+closely neighbouring colours matched. The fix was architectural: one
+`.journey-sky` gradient painted once behind the whole page instead of per-
+section, plus fading the previously-opaque limb and Kármán-haze fills to
+transparent so the shared sky shows through
+([`0744ce0`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-AbhaySKahlon/commit/0744ce0be9f0901631349e613cffb9a1a2242154)).
+Verified by screenshotting each seam at 1920×1080 and 390×844 until no hard
+edge remained.
 
-1. **what happened** --- the problem, or the thing the agent got wrong
-2. **what you did instead of the obvious thing** --- the call you made, and why
-   it beat the obvious one
-3. **how you knew it was right** --- the check you ran, the viewport you looked
-   at, what you read before accepting the diff
-4. **the citation** --- a commit or commit range, a `CLAUDE.md` change, a check
-   that went from red to green, a prompt paired with the commit it produced
+## 4. Fixing the vertical journey
 
-Jobs 2 and 3 are the ones the repo can't tell a reader on its own, so they're
-where the marks are. The strongest moments are the ones where a correction
-landed in the **harness** rather than in another prompt --- a rule added to
-`CLAUDE.md`, a check wired up, an attempt thrown away: re-prompting until it
-passes is the routine case, and changing what the agent works against is the
-skilled one.
+The scroll order originally ran Earth-to-Moon top-to-bottom, which meant
+scrolling *down* the page moved *up* away from Earth — backwards from how
+scrolling down should feel like descending into the journey. The milestone
+render order was reversed so the Moon sits at the top and Earth at the bottom,
+with `milestones.json` and the log-scale maths in `journey.ts` left untouched —
+only the stacking order changed
+([`058e968`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-AbhaySKahlon/commit/058e968d985d4654311a941d2388caade9fb9b52)).
+A follow-up commit made a fresh page load land on Earth via a hash set on first
+load, not a scroll hijack
+([`7181752`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-AbhaySKahlon/commit/7181752faf38f444a8bafd52d40f087651b18b41)).
 
-Cite each moment as a link whose text is the commit hash or range and whose
-target is this repo's commit or compare URL, so a reader clicks straight to the
-evidence:
+## 5. Replacing the ISS schematic with NASA photography
 
-- one commit: [`a1b2c3d`](https://github.com/YOUR-ORG/YOUR-REPO/commit/a1b2c3d)
-- a range:
-  [`a1b2c3d...e4f5a6b`](https://github.com/YOUR-ORG/YOUR-REPO/compare/a1b2c3d...e4f5a6b)
-
-To pair a prompt with the commit it produced, quote the prompt (curated, not a
-full transcript) next to the citation:
-
-> the prompt, verbatim
-
-Screenshots are welcome where one carries the verification better than a
-sentence does. Commit the file to this repo and link it with a **relative**
-path, which is what makes it render on GitHub: `![alt text](docs/before.png)`.
-Images don't count towards the word count and don't replace the citation.
-
-### A worked moment, for shape
-
-Delete this section along with the rest of the boilerplate --- it's here to show
-the four jobs in one paragraph, not to be imitated in content.
-
-> The date formatter kept coming back with `toLocaleDateString()` and no locale
-> argument, so the same build rendered differently on my machine and in CI. I'd
-> already re-prompted it twice, which fixed the line but not the habit, so the
-> third time I put the rule in `CLAUDE.md` instead
-> ([`3f9ac21`](https://github.com/YOUR-ORG/YOUR-REPO/commit/3f9ac21)) and added
-> a spec test that fails on a bare `toLocaleDateString`. That's what told me it
-> had actually taken: the test went red against the old code and green against
-> the new, and the next two features it wrote passed it without prompting
-> ([`3f9ac21...b7e0d14`](https://github.com/YOUR-ORG/YOUR-REPO/compare/3f9ac21...b7e0d14)).
-
-## Before you ship
-
-`pnpm check:evidence` verifies your citations resolve to real commits, that the
-current reflection entry is in `reflections/`, and that your `CLAUDE.md` is
-there --- before a marker ever opens the file. It checks that your map is
-traceable, not that it is good: the marker judges whether your small,
-deliberately chosen set of moments shows real judgement and reflection. A green
-check is not a substitute for that curation.
-
-Images are deliberately not checked, because whether one renders is visible the
-moment you look. Open this file on GitHub and look at it before you ship.
+The ISS was originally a blueprint-style SVG truss — legible but not
+convincing as "the actual space station." It was replaced with NASA's Nov. 8
+2021 Crew Dragon fly-around photograph (`jsc2021e064215_alt`), stored locally
+as a repo asset
+([`0425bd8`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-AbhaySKahlon/commit/0425bd83ed5eaea735e0abba0fd9fd9343e1e7da)).
+The first attempt used `mix-blend-mode` to drop the photo's black background,
+but the photo's parent is its own stacking context, so the blend had nothing
+to blend against and left a hard black rectangle. That was diagnosed and fixed
+with a radial `mask-image` fade instead, verified against the rendered
+station edge at both viewports
+([`13a603e`](https://github.com/comp4020-agentic-coding-studio/comp4020-ass1-AbhaySKahlon/commit/13a603e21b7b5f74d8c9d5c12c8a96e6445615aa)).
