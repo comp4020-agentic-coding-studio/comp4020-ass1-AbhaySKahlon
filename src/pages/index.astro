@@ -9,6 +9,7 @@ import { colorAt } from "../lib/palette";
 
 const milestones = sortedMilestones(rawMilestones as Milestone[]);
 const heights = sectionHeightsVh(milestones);
+const totalHeightVh = heights.reduce((sum, height) => sum + height, 0);
 
 // One boundary colour per milestone plus one final boundary past the Moon —
 // each section's top matches the previous section's bottom, so the sky-to-space
@@ -18,26 +19,45 @@ const boundaries = [
   1,
 ];
 
-// A single top/bottom colour per section flattens whatever the palette curve
-// actually does across that section's span into one straight line. Wherever a
-// section's own span crosses one of palette.ts's keyframes, that straight
-// line's slope diverges from the curve's real slope right at the point where
-// it meets the next section — and that mismatch in rate of change is what
-// reads as a hard seam, even though the colours themselves already match
-// exactly at the boundary. Sampling several points across the same span and
-// feeding them all into one gradient keeps each section's background tracking
-// the true curve, so its slope at both edges matches what the neighbouring
-// section draws at that same shared point.
-const SKY_GRADIENT_STOPS = 8;
+// Giving every `.stop` its own gradient (even a densely-sampled one) still
+// meant fifteen separate boxes, each an independent rendering surface — so a
+// hard edge could show at the seam between two of them regardless of how
+// closely their colours matched there. The fix is architectural, not
+// numerical: one gradient, painted once, behind the whole journey (see
+// `.journey-sky` in global.css), so there are no box edges for a seam to
+// live on in the first place.
+//
+// `sectionHeightsVh` clamps short legs up to MIN_LEG_VH, so vh and `position`
+// are not proportional across the page — a section can occupy far more (or
+// less) screen height than its raw distance delta would suggest. Placing
+// colour stops at even `position` fractions would therefore misalign the
+// palette against where milestones actually land on screen. Cumulative
+// height fractions fix that: stop i sits at (sum of the heights of all
+// sections before it) / (total height), which is exactly where that
+// milestone's boundary really renders.
+const cumulativeHeightFractions = heights.reduce<number[]>(
+  (acc, height) => [...acc, acc[acc.length - 1] + height / totalHeightVh],
+  [0],
+);
 
-function skyGradient(index: number): string {
-  const top = boundaries[index + 1];
-  const bottom = boundaries[index];
-  const stops = Array.from({ length: SKY_GRADIENT_STOPS }, (_, i) => {
-    const t = i / (SKY_GRADIENT_STOPS - 1);
-    return colorAt(top + (bottom - top) * t);
-  });
-  return `linear-gradient(to bottom, ${stops.join(", ")})`;
+const SKY_GRADIENT_SAMPLES_PER_SECTION = 8;
+
+function journeySkyGradient(): string {
+  const stops = milestones.flatMap((_, index) =>
+    Array.from({ length: SKY_GRADIENT_SAMPLES_PER_SECTION }, (_, sample) => {
+      const t = sample / SKY_GRADIENT_SAMPLES_PER_SECTION;
+      const position = boundaries[index] + (boundaries[index + 1] - boundaries[index]) * t;
+      const heightFraction =
+        cumulativeHeightFractions[index] +
+        (cumulativeHeightFractions[index + 1] - cumulativeHeightFractions[index]) * t;
+      return `${colorAt(position)} ${(heightFraction * 100).toFixed(3)}%`;
+    }),
+  );
+  stops.push(`${colorAt(1)} 100%`);
+  // Earth (position 0) is the bottom-most section on the page and the Moon
+  // (position 1) the topmost (see the reversed display order below), so the
+  // gradient runs bottom-to-top with the same direction as the page itself.
+  return `linear-gradient(to top, ${stops.join(", ")})`;
 }
 
 const encountersFor = encountersByMilestone as Record<string, { kind: string; label: string }[]>;
@@ -47,10 +67,7 @@ const encountersFor = encountersByMilestone as Record<string, { kind: string; la
 // Earth. `milestones`/`heights`/`boundaries` above stay in ascending-distance
 // order — that's still the source of truth the maths reads from — this
 // reversed copy only controls the order sections stack on the page. Each
-// section keeps its own height; only the stacking direction flips, so
-// skyGradient(index) reads its top/bottom from the ascending boundaries
-// regardless of display order, keeping the sky-to-space gradient continuous
-// across the now-reversed stack.
+// section keeps its own height; only the stacking direction flips.
 const displayMilestones = [...milestones].reverse();
 ---
 
@@ -62,6 +79,7 @@ const displayMilestones = [...milestones].reverse();
   </header>
   <Hud />
   <main id="journey">
+    <div class="journey-sky" aria-hidden="true" style={`background:${journeySkyGradient()}`} />
     {
       displayMilestones.map((milestone, displayIndex) => {
         const index = milestones.length - 1 - displayIndex;
@@ -70,7 +88,6 @@ const displayMilestones = [...milestones].reverse();
             milestone={milestone}
             encounters={encountersFor[milestone.id] ?? []}
             heightVh={heights[index]}
-            skyGradient={skyGradient(index)}
             isFirst={milestone.id === "earth"}
           />
         );

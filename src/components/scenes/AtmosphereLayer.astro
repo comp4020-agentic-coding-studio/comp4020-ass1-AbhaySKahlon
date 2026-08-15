@@ -35,6 +35,12 @@ interface Cloud {
 interface StageConfig {
   apex: number;
   dip: number;
+  // The last two stops always repeat the stage's own final colour: one at
+  // full opacity to preserve the existing colour progression, one at 0
+  // opacity so the very bottom of the limb fades to nothing instead of
+  // ending in a hard opaque edge — letting the shared .journey-sky (painted
+  // behind every section) show through instead of a rectangular cut where
+  // this scene's box meets the next one.
   limbStops: { offset: string; color: string; opacity: number }[];
   rimOpacity: number;
   rimWidth: number;
@@ -49,7 +55,8 @@ const STAGES: Record<Stage, StageConfig> = {
       { offset: "0%", color: "#e4f4ff", opacity: 0.65 },
       { offset: "15%", color: "#3fa06f", opacity: 1 },
       { offset: "58%", color: "#1b6f4c", opacity: 1 },
-      { offset: "100%", color: "#0d3350", opacity: 1 },
+      { offset: "82%", color: "#0d3350", opacity: 1 },
+      { offset: "100%", color: "#0d3350", opacity: 0 },
     ],
     rimOpacity: 0.5,
     rimWidth: 1.4,
@@ -69,7 +76,8 @@ const STAGES: Record<Stage, StageConfig> = {
       { offset: "0%", color: "#a9d4ef", opacity: 0.45 },
       { offset: "25%", color: "#2f6f95", opacity: 1 },
       { offset: "70%", color: "#1b3a55", opacity: 1 },
-      { offset: "100%", color: "#0c1e2e", opacity: 1 },
+      { offset: "82%", color: "#0c1e2e", opacity: 1 },
+      { offset: "100%", color: "#0c1e2e", opacity: 0 },
     ],
     rimOpacity: 0.75,
     rimWidth: 0.9,
@@ -85,7 +93,8 @@ const STAGES: Record<Stage, StageConfig> = {
       { offset: "0%", color: "#4d7fa8", opacity: 0.4 },
       { offset: "30%", color: "#1b3a55", opacity: 1 },
       { offset: "70%", color: "#123a5e", opacity: 1 },
-      { offset: "100%", color: "#05070d", opacity: 1 },
+      { offset: "82%", color: "#05070d", opacity: 1 },
+      { offset: "100%", color: "#05070d", opacity: 0 },
     ],
     rimOpacity: 0.95,
     rimWidth: 0.6,

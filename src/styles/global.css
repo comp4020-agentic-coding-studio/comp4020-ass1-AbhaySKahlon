@@ -100,6 +100,20 @@ header nav a {
 
 main#journey {
   position: relative;
+  isolation: isolate;
+}
+
+/* One continuous gradient behind the whole journey, not fifteen separate
+   section backgrounds — see `journeySkyGradient()` in index.astro for why.
+   `main#journey`'s `isolation: isolate` gives this a stacking context of its
+   own to sit at the bottom of, so z-index: -1 here is guaranteed to stay
+   behind every `.stop` (and every phase's own starfield pseudo-elements)
+   without depending on the rest of the page's stacking order. */
+.journey-sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .stop {
@@ -108,7 +122,6 @@ main#journey {
   align-items: center;
   justify-content: center;
   padding: 2rem 1.5rem;
-  background: var(--sky-gradient);
   overflow: hidden;
 }
 
