@@ -692,14 +692,31 @@ main#journey {
   }
 }
 
-/* ---- the Moon ---- */
+/* ---- the Moon ----
+   Anchored to the section's vertical midpoint (`top: 50%` +
+   `translateY(-50%)`), not the top: `.stop`'s tall multi-viewport box means
+   an element pinned near its top scrolls past and out of view long before
+   the box is done scrolling. Centring gives the disc the same wide visible
+   window `.stop-content` gets — `.stop-content` is a flex child of `.stop`
+   with `align-items: center`, so it's already centred the same way, even
+   though it's marked `position: sticky` too: `.stop`'s `overflow: hidden`
+   sits between it and the actual scrolling element, which makes sticky a
+   no-op here (verified: `.stop-content` drifts with scroll at every offset
+   tested, never freezes), so stickiness was never actually doing the
+   docking-in-place work — the flex centring was. Anchoring the Moon disc the
+   same way keeps it in view alongside the text panel and the lunar ground
+   (anchored to the very bottom) instead of disappearing into a dead patch of
+   empty sky between them. The "full" disc anchors a little below centre
+   (`top: 58%`) so it overlaps the ground beginning to rise into view near
+   the end of the section, rather than receding before the ground appears. */
 
 .moon-disc {
   position: absolute;
-  right: 6%;
   top: 50%;
+  right: 6%;
   transform: translateY(-50%);
-  filter: drop-shadow(0 0 4rem rgb(255 255 255 / 10%));
+  z-index: 1;
+  filter: drop-shadow(0 0 3rem rgb(2 6 14 / 55%));
 }
 
 .moon-disc svg {
@@ -707,7 +724,7 @@ main#journey {
 }
 
 .moon-disc-approach {
-  width: min(28vw, 12rem);
+  width: min(22vw, 9rem);
 }
 
 .moon-disc-approach svg {
@@ -716,9 +733,11 @@ main#journey {
 }
 
 .moon-disc-full {
-  width: min(68vw, 40rem);
+  width: min(70vw, 42rem);
   right: -4%;
-  filter: drop-shadow(0 0 6rem rgb(255 255 255 / 16%));
+  top: 58%;
+  filter:
+    drop-shadow(0 0 7rem rgb(2 6 14 / 60%)) drop-shadow(0 0 1.5rem rgb(255 255 255 / 10%));
 }
 
 .moon-disc-full svg {
@@ -943,13 +962,15 @@ main#journey {
   }
 
   .moon-disc-approach {
-    width: min(38vw, 8rem);
+    width: min(32vw, 7rem);
   }
 
   .moon-disc-full {
-    width: min(92vw, 24rem);
-    inset: auto auto 14vh 50%;
-    transform: translateX(-50%);
+    width: min(94vw, 25rem);
+    top: 58%;
+    right: auto;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .van-allen-field svg {
