@@ -470,12 +470,21 @@ main#journey {
   z-index: 1;
   width: min(78vmin, 40rem);
   height: auto;
-  filter: drop-shadow(0 0 4vmin rgb(180 210 255 / 12%));
+  filter: brightness(0.92) saturate(0.94) drop-shadow(0 0 4vmin rgb(180 210 255 / 12%));
 
-  /* Same alpha-mask technique as the ISS photo: fades the photo's own
-     rectangular frame into the surrounding starfield instead of leaving a
-     hard edge. */
-  mask-image: radial-gradient(ellipse 58% 56% at 50% 46%, black 55%, transparent 100%);
+  /* An inset shadow paints a soft vignette directly onto the photo (darkening
+     its own edges) before the mask below fades those edges to transparent —
+     without it, the high-key archival print jumps straight from full
+     brightness to empty space, reading as a pasted-on card instead of a
+     photograph sitting in a dim capsule within the dark scene. */
+  box-shadow: inset 0 0 10vmin 3vmin rgb(2 6 18 / 65%);
+
+  /* Same alpha-mask technique as the ISS photo, but with a much earlier,
+     wider fade band (35% vs. the ISS photo's 62%) so a good third of the
+     frame is already dissolving into the surrounding black before the edge
+     — the archival print's bright highlights taper into the dark scene
+     gradually instead of hitting a stark transparent boundary. */
+  mask-image: radial-gradient(ellipse 56% 52% at 50% 46%, black 35%, transparent 100%);
   mask-repeat: no-repeat;
 }
 
