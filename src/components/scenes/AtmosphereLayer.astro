@@ -9,7 +9,7 @@
 // KarmanHorizon's existing palette (`#123a5e` -> near-black) so the step
 // into the Kármán scene doesn't read as a sudden colour jump.
 type Stage = "troposphere" | "stratosphere" | "mesosphere";
-type CloudShape = "puff" | "wisp";
+type CloudShape = "puff" | "wisp" | "billow";
 
 export interface Props {
   stage: Stage;
@@ -17,9 +17,15 @@ export interface Props {
 
 const { stage } = Astro.props;
 
+// Three irregular, hand-authored silhouettes (never a circle, never reused
+// as an exact geometric duplicate) so repeating a shape across several
+// clouds still reads as varied masses rather than the same sticker stamped
+// at different sizes.
 const cloudBlobs: Record<CloudShape, string> = {
   puff: "M -1.1 0.1 C -1.2 -0.35 -0.7 -0.55 -0.3 -0.4 C -0.05 -0.6 0.35 -0.55 0.5 -0.3 C 0.85 -0.4 1.15 -0.15 1.05 0.15 C 0.9 0.4 0.5 0.5 0.15 0.42 C -0.3 0.55 -0.9 0.45 -1.1 0.1 Z",
   wisp: "M -1 0 C -1 -0.16 -0.6 -0.22 -0.2 -0.15 C 0.2 -0.22 0.7 -0.12 1 0 C 0.7 0.16 0.2 0.2 -0.2 0.15 C -0.6 0.2 -1 0.12 -1 0 Z",
+  billow:
+    "M -1.05 0.15 C -1.15 -0.25 -0.85 -0.5 -0.55 -0.35 C -0.35 -0.6 0.05 -0.62 0.25 -0.4 C 0.5 -0.55 0.95 -0.4 1 -0.05 C 1.15 0.2 0.9 0.45 0.55 0.38 C 0.35 0.58 -0.15 0.6 -0.4 0.4 C -0.75 0.5 -1 0.35 -1.05 0.15 Z",
 };
 
 interface Cloud {
@@ -30,6 +36,10 @@ interface Cloud {
   opacity: number;
   shape: CloudShape;
   layer: "near" | "far";
+  // Small, hand-picked (not random) offset for the denser inner core within
+  // the cluster, so the core reads as an off-centre denser region of the
+  // same mass rather than a concentric scaled copy of the outer bank.
+  coreOffset: [number, number];
 }
 
 interface StageConfig {
@@ -44,6 +54,12 @@ interface StageConfig {
   limbStops: { offset: string; color: string; opacity: number }[];
   rimOpacity: number;
   rimWidth: number;
+  // A wide, heavily blurred stroke along the same limb curve, sitting behind
+  // the crisp rim highlight — the diffuse atmospheric scattering thickest low
+  // down, fading out with altitude, as distinct from the rim's thin bright
+  // edge (which does the opposite: it gets crisper/brighter with altitude).
+  hazeOpacity: number;
+  hazeWidth: number;
   clouds: Cloud[];
 }
 
@@ -60,13 +76,15 @@ const STAGES: Record<Stage, StageConfig> = {
     ],
     rimOpacity: 0.5,
     rimWidth: 1.4,
+    hazeOpacity: 0.35,
+    hazeWidth: 9,
     clouds: [
-      { x: 14, y: 30, sx: 20, sy: 9, opacity: 0.88, shape: "puff", layer: "near" },
-      { x: 52, y: 24, sx: 28, sy: 12, opacity: 0.92, shape: "puff", layer: "near" },
-      { x: 86, y: 34, sx: 18, sy: 8, opacity: 0.7, shape: "puff", layer: "near" },
-      { x: 32, y: 40, sx: 15, sy: 6.5, opacity: 0.55, shape: "wisp", layer: "far" },
-      { x: 68, y: 14, sx: 18, sy: 7, opacity: 0.5, shape: "wisp", layer: "far" },
-      { x: 2, y: 18, sx: 12, sy: 5, opacity: 0.45, shape: "puff", layer: "far" },
+      { x: 14, y: 30, sx: 20, sy: 9, opacity: 0.78, shape: "puff", layer: "near", coreOffset: [0.12, -0.08] },
+      { x: 52, y: 24, sx: 28, sy: 12, opacity: 0.8, shape: "billow", layer: "near", coreOffset: [-0.15, 0.1] },
+      { x: 86, y: 34, sx: 18, sy: 8, opacity: 0.62, shape: "puff", layer: "near", coreOffset: [0.1, 0.12] },
+      { x: 32, y: 40, sx: 15, sy: 6.5, opacity: 0.48, shape: "wisp", layer: "far", coreOffset: [-0.1, -0.06] },
+      { x: 68, y: 14, sx: 18, sy: 7, opacity: 0.44, shape: "wisp", layer: "far", coreOffset: [0.14, 0.05] },
+      { x: 2, y: 18, sx: 12, sy: 5, opacity: 0.4, shape: "billow", layer: "far", coreOffset: [-0.08, 0.1] },
     ],
   },
   stratosphere: {
@@ -81,9 +99,11 @@ const STAGES: Record<Stage, StageConfig> = {
     ],
     rimOpacity: 0.75,
     rimWidth: 0.9,
+    hazeOpacity: 0.18,
+    hazeWidth: 6,
     clouds: [
-      { x: 24, y: 24, sx: 26, sy: 3.4, opacity: 0.3, shape: "wisp", layer: "far" },
-      { x: 68, y: 16, sx: 20, sy: 2.8, opacity: 0.22, shape: "wisp", layer: "far" },
+      { x: 24, y: 24, sx: 26, sy: 3.4, opacity: 0.28, shape: "wisp", layer: "far", coreOffset: [0.16, 0.04] },
+      { x: 68, y: 16, sx: 20, sy: 2.8, opacity: 0.2, shape: "wisp", layer: "far", coreOffset: [-0.14, -0.03] },
     ],
   },
   mesosphere: {
@@ -98,6 +118,8 @@ const STAGES: Record<Stage, StageConfig> = {
     ],
     rimOpacity: 0.95,
     rimWidth: 0.6,
+    hazeOpacity: 0.08,
+    hazeWidth: 4,
     clouds: [],
   },
 };
@@ -120,6 +142,7 @@ const rimPath = `M0 ${config.dip} Q50 ${config.apex} 100 ${config.dip}`;
       </linearGradient>
     </defs>
     <path class="atmo-limb" d={limbPath} fill={`url(#${limbGradientId})`} />
+    <path class="atmo-haze-band" d={rimPath} fill="none" opacity={config.hazeOpacity} stroke-width={config.hazeWidth} />
     <path class="atmo-rim-glow" d={rimPath} fill="none" />
     <path class="atmo-rim" d={rimPath} fill="none" opacity={config.rimOpacity} stroke-width={config.rimWidth} />
     <g class="atmo-clouds">
@@ -130,7 +153,16 @@ const rimPath = `M0 ${config.dip} Q50 ${config.apex} 100 ${config.dip}`;
             transform={`translate(${cloud.x} ${cloud.y}) scale(${cloud.sx} ${cloud.sy})`}
             opacity={cloud.opacity}
           >
-            <path d={cloudBlobs[cloud.shape]} />
+            {/* Layered cluster — a soft outer haze, a broad mid bank, and a
+               denser, off-centre inner core — so one cloud reads as a
+               translucent atmospheric mass rather than a flat solid blob. */}
+            <path class="atmo-cloud-haze" d={cloudBlobs[cloud.shape]} transform="scale(1.3)" />
+            <path class="atmo-cloud-body" d={cloudBlobs[cloud.shape]} />
+            <path
+              class="atmo-cloud-core"
+              d={cloudBlobs[cloud.shape]}
+              transform={`translate(${cloud.coreOffset[0]} ${cloud.coreOffset[1]}) scale(0.5)`}
+            />
           </g>
         ))
       }

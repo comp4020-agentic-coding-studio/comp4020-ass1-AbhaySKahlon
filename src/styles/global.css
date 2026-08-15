@@ -320,12 +320,49 @@ main#journey {
   filter: blur(2.5px);
 }
 
-.atmo-cloud path {
-  fill: #fbfdff;
+/* Wide, heavily blurred band along the same limb curve as the rim — the
+   diffuse atmospheric scattering rather than the thin bright edge. Reads as
+   volumetric haze hugging the horizon instead of the rim looking like a flat
+   coloured line. */
+.atmo-haze-band {
+  stroke: #bfe4ff;
+  filter: blur(6px);
 }
 
-.atmo-cloud-far {
+/* Each cloud is a small cluster of three passes over the same silhouette —
+   a soft, larger, more blurred outer haze; the drawn-size mid bank; and a
+   smaller, off-centre, sharper core — so it reads as a translucent mass with
+   depth rather than one flat-filled shape. */
+.atmo-cloud-haze {
+  fill: #dcebf7;
+  filter: blur(2.4px);
+  opacity: 0.5;
+}
+
+.atmo-cloud-body {
+  fill: #eef6ff;
+  filter: blur(0.6px);
+  opacity: 0.82;
+}
+
+.atmo-cloud-core {
+  fill: #fff;
+  opacity: 0.95;
+}
+
+.atmo-cloud-far .atmo-cloud-haze {
+  filter: blur(3px);
+  opacity: 0.4;
+}
+
+.atmo-cloud-far .atmo-cloud-body {
   filter: blur(1.4px);
+  opacity: 0.7;
+}
+
+.atmo-cloud-far .atmo-cloud-core {
+  filter: blur(0.5px);
+  opacity: 0.8;
 }
 
 @media (prefers-reduced-motion: no-preference) {
