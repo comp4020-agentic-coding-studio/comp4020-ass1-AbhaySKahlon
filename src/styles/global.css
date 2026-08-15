@@ -386,13 +386,19 @@ main#journey {
 .iss-photo {
   width: min(96vmin, 68rem);
   height: auto;
-
-  /* The source photo sits on a pure black background; screen-blending it
-     against the already near-black space sky at this point in the journey
-     (see palette.ts) removes the black rectangle without masking or
-     recolouring the station itself. */
-  mix-blend-mode: screen;
   filter: drop-shadow(0 0 5vmin rgb(180 210 255 / 12%));
+
+  /* `.stop-scene` (the parent) is its own stacking context (position:
+     absolute + z-index), so mix-blend-mode here can only blend against
+     content painted inside that same context — it can never reach the
+     starfield or sky gradient painted on `.stop` itself, which is why blend
+     alone still showed the photo's black background as a hard rectangle.
+     A mask fade uses plain alpha transparency instead, which does cross
+     stacking-context boundaries, so the padding around the station reveals
+     the real sky/stars behind it while the station itself stays fully
+     opaque. */
+  mask-image: radial-gradient(ellipse 62% 54% at 50% 50%, black 62%, transparent 100%);
+  mask-repeat: no-repeat;
 }
 
 /* ---- animal astronauts ---- */
