@@ -764,26 +764,38 @@ main#journey {
    Three density tiers so the sky-to-space gradient (palette.ts) isn't the
    only thing that changes as the journey leaves Earth: a faint hint right at
    the Kármán line, a moderate field through orbit, and the densest field in
-   deep space and around the Moon. Each tier is one pseudo-element's
+   deep space and around the Moon. Each tier is a pseudo-element's
    background-image with many hand-placed radial-gradient stops (no tiling,
-   varied size/alpha for depth) rather than a repeated pattern or new imagery.
-   A second, sparser pseudo-element (::after) on the deep-space/Moon tier
-   carries a very subtle twinkle — the dense base layer (::before) stays
-   static so the effect reads as "a few stars flicker", not the whole sky
-   pulsing. */
+   irregular spacing, varied size/alpha for depth) rather than a repeated
+   pattern or new imagery. Within the dense tier, stars are themselves layered
+   in three size/brightness bands — distant (numerous, faint), mid, and a rare
+   handful of bright "near" stars — so the field reads as having depth rather
+   than being one uniform dot size.
+   Two further, much sparser pseudo-elements carry a restrained twinkle: one
+   on `.stop::after`, one on the `.stop-scene` that already exists inside every
+   section (reusing an existing element rather than adding new markup). Using
+   two independently-timed layers, each holding only a few stars, means the
+   handful of stars that do animate don't all pulse in the same instant within
+   a single section — the dense base layer (::before) stays completely
+   static, so only a small minority of the total starfield is ever moving. */
 
 #karman-line::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.5;
-  background-image: radial-gradient(1px 1px at 14% 18%, rgb(255 255 255 / 70%), transparent),
-    radial-gradient(1px 1px at 66% 24%, rgb(255 255 255 / 55%), transparent),
-    radial-gradient(1px 1px at 40% 58%, rgb(255 255 255 / 65%), transparent),
-    radial-gradient(1px 1px at 82% 66%, rgb(255 255 255 / 50%), transparent),
-    radial-gradient(1px 1px at 24% 80%, rgb(255 255 255 / 60%), transparent),
-    radial-gradient(1px 1px at 90% 42%, rgb(255 255 255 / 45%), transparent);
+  opacity: 0.45;
+  background-image: radial-gradient(1px 1px at 14% 18%, rgb(255 255 255 / 65%), transparent),
+    radial-gradient(1px 1px at 66% 24%, rgb(255 255 255 / 50%), transparent),
+    radial-gradient(1px 1px at 40% 58%, rgb(255 255 255 / 60%), transparent),
+    radial-gradient(1px 1px at 82% 66%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 24% 80%, rgb(255 255 255 / 55%), transparent),
+    radial-gradient(1px 1px at 90% 42%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 6% 46%, rgb(255 255 255 / 35%), transparent),
+    radial-gradient(1px 1px at 55% 10%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 30% 92%, rgb(255 255 255 / 30%), transparent),
+    radial-gradient(1px 1px at 96% 80%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 48% 34%, rgb(255 255 255 / 50%), transparent);
 }
 
 .stop[data-phase="orbit"]::before,
@@ -794,17 +806,29 @@ main#journey {
   pointer-events: none;
   opacity: 0.6;
   background-image: radial-gradient(1px 1px at 6% 12%, rgb(255 255 255 / 85%), transparent),
-    radial-gradient(1.4px 1.4px at 18% 40%, rgb(255 255 255 / 70%), transparent),
     radial-gradient(1px 1px at 30% 75%, rgb(255 255 255 / 60%), transparent),
     radial-gradient(1px 1px at 44% 22%, rgb(255 255 255 / 90%), transparent),
-    radial-gradient(1.4px 1.4px at 56% 60%, rgb(255 255 255 / 55%), transparent),
     radial-gradient(1px 1px at 68% 12%, rgb(255 255 255 / 75%), transparent),
     radial-gradient(1px 1px at 74% 48%, rgb(255 255 255 / 65%), transparent),
-    radial-gradient(1.6px 1.6px at 82% 82%, rgb(255 255 255 / 60%), transparent),
     radial-gradient(1px 1px at 90% 30%, rgb(255 255 255 / 80%), transparent),
     radial-gradient(1px 1px at 12% 88%, rgb(255 255 255 / 50%), transparent),
     radial-gradient(1px 1px at 38% 92%, rgb(255 255 255 / 55%), transparent),
-    radial-gradient(1.4px 1.4px at 60% 8%, rgb(255 255 255 / 70%), transparent);
+    radial-gradient(1px 1px at 4% 62%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 52% 6%, rgb(255 255 255 / 60%), transparent),
+    radial-gradient(1px 1px at 96% 60%, rgb(255 255 255 / 50%), transparent),
+    radial-gradient(1px 1px at 22% 40%, rgb(255 255 255 / 55%), transparent),
+    radial-gradient(1px 1px at 62% 66%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 84% 20%, rgb(255 255 255 / 65%), transparent),
+    radial-gradient(1.4px 1.4px at 18% 40%, rgb(255 255 255 / 70%), transparent),
+    radial-gradient(1.4px 1.4px at 56% 60%, rgb(255 255 255 / 55%), transparent),
+    radial-gradient(1.6px 1.6px at 82% 82%, rgb(255 255 255 / 60%), transparent),
+    radial-gradient(1.4px 1.4px at 60% 8%, rgb(255 255 255 / 70%), transparent),
+    radial-gradient(1.3px 1.3px at 34% 54%, rgb(255 255 255 / 60%), transparent),
+    radial-gradient(1.4px 1.4px at 8% 30%, rgb(255 255 255 / 65%), transparent),
+    radial-gradient(1.3px 1.3px at 70% 94%, rgb(255 255 255 / 55%), transparent),
+    radial-gradient(1.4px 1.4px at 94% 8%, rgb(255 255 255 / 60%), transparent),
+    radial-gradient(1.8px 1.8px at 46% 78%, rgb(255 255 255 / 90%), transparent),
+    radial-gradient(1.8px 1.8px at 78% 36%, rgb(255 255 255 / 85%), transparent);
 }
 
 .stop[data-phase="deep-space"]::before,
@@ -814,31 +838,54 @@ main#journey {
   inset: 0;
   pointer-events: none;
   opacity: 0.85;
-  background-image: radial-gradient(1px 1px at 12% 20%, #fff, transparent),
-    radial-gradient(1px 1px at 78% 65%, #fff, transparent),
-    radial-gradient(1px 1px at 45% 80%, #fff, transparent),
-    radial-gradient(1px 1px at 88% 15%, #fff, transparent),
-    radial-gradient(1px 1px at 30% 45%, #fff, transparent),
-    radial-gradient(1.4px 1.4px at 5% 55%, rgb(255 255 255 / 80%), transparent),
-    radial-gradient(1px 1px at 20% 8%, rgb(255 255 255 / 65%), transparent),
-    radial-gradient(1px 1px at 36% 62%, rgb(255 255 255 / 55%), transparent),
-    radial-gradient(1.6px 1.6px at 52% 30%, rgb(255 255 255 / 75%), transparent),
-    radial-gradient(1px 1px at 60% 90%, rgb(255 255 255 / 50%), transparent),
-    radial-gradient(1px 1px at 68% 38%, rgb(255 255 255 / 70%), transparent),
-    radial-gradient(1.4px 1.4px at 74% 8%, rgb(255 255 255 / 60%), transparent),
-    radial-gradient(1px 1px at 82% 48%, rgb(255 255 255 / 65%), transparent),
-    radial-gradient(1px 1px at 92% 72%, rgb(255 255 255 / 55%), transparent),
-    radial-gradient(1.6px 1.6px at 96% 25%, rgb(255 255 255 / 70%), transparent),
-    radial-gradient(1px 1px at 8% 88%, rgb(255 255 255 / 50%), transparent),
-    radial-gradient(1px 1px at 25% 95%, rgb(255 255 255 / 60%), transparent),
-    radial-gradient(1px 1px at 40% 12%, rgb(255 255 255 / 55%), transparent),
-    radial-gradient(1.4px 1.4px at 56% 55%, rgb(255 255 255 / 65%), transparent),
-    radial-gradient(1px 1px at 64% 70%, rgb(255 255 255 / 45%), transparent),
-    radial-gradient(1px 1px at 15% 35%, rgb(255 255 255 / 60%), transparent),
-    radial-gradient(1px 1px at 48% 45%, rgb(255 255 255 / 50%), transparent),
-    radial-gradient(1.6px 1.6px at 85% 90%, rgb(255 255 255 / 60%), transparent),
-    radial-gradient(1px 1px at 95% 55%, rgb(255 255 255 / 45%), transparent),
-    radial-gradient(1px 1px at 3% 75%, rgb(255 255 255 / 55%), transparent);
+  background-image: radial-gradient(1px 1px at 12% 20%, rgb(255 255 255 / 55%), transparent),
+    radial-gradient(1px 1px at 78% 65%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 45% 80%, rgb(255 255 255 / 50%), transparent),
+    radial-gradient(1px 1px at 88% 15%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 30% 45%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 20% 8%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 36% 62%, rgb(255 255 255 / 35%), transparent),
+    radial-gradient(1px 1px at 60% 90%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 68% 38%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 82% 48%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 92% 72%, rgb(255 255 255 / 35%), transparent),
+    radial-gradient(1px 1px at 8% 88%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 25% 95%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 40% 12%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 64% 70%, rgb(255 255 255 / 35%), transparent),
+    radial-gradient(1px 1px at 15% 35%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 48% 45%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 95% 55%, rgb(255 255 255 / 35%), transparent),
+    radial-gradient(1px 1px at 3% 75%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 58% 24%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 72% 92%, rgb(255 255 255 / 35%), transparent),
+    radial-gradient(1px 1px at 10% 5%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 33% 30%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 86% 5%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 42% 96%, rgb(255 255 255 / 35%), transparent),
+    radial-gradient(1px 1px at 76% 20%, rgb(255 255 255 / 40%), transparent),
+    radial-gradient(1px 1px at 18% 68%, rgb(255 255 255 / 45%), transparent),
+    radial-gradient(1px 1px at 50% 70%, rgb(255 255 255 / 35%), transparent),
+    radial-gradient(1.4px 1.4px at 5% 55%, rgb(255 255 255 / 75%), transparent),
+    radial-gradient(1.6px 1.6px at 52% 30%, rgb(255 255 255 / 70%), transparent),
+    radial-gradient(1.6px 1.6px at 96% 25%, rgb(255 255 255 / 65%), transparent),
+    radial-gradient(1.4px 1.4px at 56% 55%, rgb(255 255 255 / 60%), transparent),
+    radial-gradient(1.3px 1.3px at 24% 24%, rgb(255 255 255 / 55%), transparent),
+    radial-gradient(1.4px 1.4px at 88% 88%, rgb(255 255 255 / 60%), transparent),
+    radial-gradient(1.6px 1.6px at 66% 8%, rgb(255 255 255 / 65%), transparent),
+    radial-gradient(1.3px 1.3px at 14% 50%, rgb(255 255 255 / 55%), transparent),
+    radial-gradient(1.4px 1.4px at 44% 66%, rgb(255 255 255 / 60%), transparent),
+    radial-gradient(1.3px 1.3px at 80% 60%, rgb(255 255 255 / 55%), transparent),
+    radial-gradient(1.6px 1.6px at 28% 82%, rgb(255 255 255 / 65%), transparent),
+    radial-gradient(1.3px 1.3px at 62% 14%, rgb(255 255 255 / 55%), transparent),
+    radial-gradient(1.4px 1.4px at 90% 40%, rgb(255 255 255 / 60%), transparent),
+    radial-gradient(1.3px 1.3px at 38% 40%, rgb(255 255 255 / 55%), transparent),
+    radial-gradient(2px 2px at 20% 55%, #fff, transparent),
+    radial-gradient(1.8px 1.8px at 45% 10%, #fff, transparent),
+    radial-gradient(2px 2px at 70% 75%, #fff, transparent),
+    radial-gradient(1.8px 1.8px at 8% 15%, #fff, transparent),
+    radial-gradient(1.8px 1.8px at 55% 92%, #fff, transparent),
+    radial-gradient(2px 2px at 92% 10%, #fff, transparent);
 }
 
 .stop[data-phase="deep-space"]::after,
@@ -849,13 +896,23 @@ main#journey {
   pointer-events: none;
   opacity: 0.6;
   background-image: radial-gradient(1.8px 1.8px at 22% 30%, #fff, transparent),
-    radial-gradient(1.6px 1.6px at 70% 20%, #fff, transparent),
-    radial-gradient(2px 2px at 50% 68%, #fff, transparent),
+    radial-gradient(2px 2px at 70% 20%, #fff, transparent),
+    radial-gradient(1.8px 1.8px at 50% 68%, #fff, transparent),
     radial-gradient(1.6px 1.6px at 85% 55%, #fff, transparent),
-    radial-gradient(1.8px 1.8px at 10% 68%, #fff, transparent),
-    radial-gradient(1.6px 1.6px at 62% 88%, #fff, transparent),
-    radial-gradient(2px 2px at 35% 10%, #fff, transparent),
-    radial-gradient(1.6px 1.6px at 92% 35%, #fff, transparent);
+    radial-gradient(1.8px 1.8px at 10% 68%, #fff, transparent);
+}
+
+.stop[data-phase="deep-space"] .stop-scene::after,
+.stop[data-phase="moon"] .stop-scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image: radial-gradient(1.6px 1.6px at 62% 88%, #fff, transparent),
+    radial-gradient(1.8px 1.8px at 35% 10%, #fff, transparent),
+    radial-gradient(1.6px 1.6px at 92% 35%, #fff, transparent),
+    radial-gradient(1.4px 1.4px at 15% 45%, #fff, transparent);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -864,9 +921,16 @@ main#journey {
     animation: star-twinkle 7s ease-in-out infinite;
   }
 
-  /* Negative delays offset each section's twinkle so the whole page doesn't
-     pulse in lockstep when several deep-space/Moon sections are visible or
-     scrolled past in sequence. */
+  .stop[data-phase="deep-space"] .stop-scene::after,
+  .stop[data-phase="moon"] .stop-scene::after {
+    animation: star-twinkle 9.5s ease-in-out infinite;
+  }
+
+  /* Negative delays offset each section's twinkle, and the two layers use
+     different delays from each other too, so within a single visible section
+     the handful of animating stars drift in and out at different moments
+     instead of pulsing together — a small minority of the field moving, not
+     the whole sky blinking in lockstep. */
   #inner-van-allen::after {
     animation-delay: -1s;
   }
@@ -890,16 +954,40 @@ main#journey {
   #moon::after {
     animation-delay: -6s;
   }
+
+  #inner-van-allen .stop-scene::after {
+    animation-delay: -0.5s;
+  }
+
+  #outer-van-allen .stop-scene::after {
+    animation-delay: -2s;
+  }
+
+  #space-debris .stop-scene::after {
+    animation-delay: -3.5s;
+  }
+
+  #deep-space .stop-scene::after {
+    animation-delay: -5s;
+  }
+
+  #moon-approach .stop-scene::after {
+    animation-delay: -1.5s;
+  }
+
+  #moon .stop-scene::after {
+    animation-delay: -4.5s;
+  }
 }
 
 @keyframes star-twinkle {
   0%,
   100% {
-    opacity: 0.35;
+    opacity: 0.4;
   }
 
   50% {
-    opacity: 0.85;
+    opacity: 0.75;
   }
 }
 
@@ -1016,7 +1104,9 @@ main#journey {
   .astro-mote,
   .atmo-clouds,
   .stop[data-phase="deep-space"]::after,
-  .stop[data-phase="moon"]::after {
+  .stop[data-phase="moon"]::after,
+  .stop[data-phase="deep-space"] .stop-scene::after,
+  .stop[data-phase="moon"] .stop-scene::after {
     animation: none;
   }
 }
